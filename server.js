@@ -27,7 +27,7 @@ dotenv.config();
 
 const mongo = process.env.MONGODB_URI;
 
-mongoose.connect(mongo, {
+mongoose.connect('mongodb+srv://moses:slugterra@cluster0-czitz.mongodb.net/test?retryWrites=true&w=majority', {
   useNewUrlParser: true,
   useUnifiedTopology: true
 })
