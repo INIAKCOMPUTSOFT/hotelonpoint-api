@@ -25,7 +25,7 @@ cloudinary.config({
 
 dotenv.config();
 
-const mongo = process.env.MONGO_URI;
+const mongo = process.env.MONGO_URI || 'mongodb+srv://moses:slugterra@cluster0-czitz.mongodb.net/test?retryWrites=true&w=majority';
 
 mongoose.connect(mongo, {
   useNewUrlParser: true,
