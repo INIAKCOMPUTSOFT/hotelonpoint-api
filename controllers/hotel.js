@@ -114,3 +114,49 @@ exports.addHotel = (req, res) => {
     })
             
 }
+
+exports.getHotels = async (req, res) => {
+    try {
+        const hotel = await Hotel.find()
+        if (hotel) {
+          return res.status(httpStatus.OK).json({
+            status: "succes",
+            HotelCount: hotel.length,
+            data: hotel
+          });
+        } else {
+          return res.status(httpStatus.BAD_REQUEST).json({
+            message: "no user Found"
+          });
+        }
+      } catch (error) {
+        return res.status(httpStatus.INTERNAL_SERVER_ERROR).json({
+          status: "error",
+          message: "something  went wrong"
+        });
+      }
+    
+}
+
+exports.getAhotel = async (req, res) => {
+    try {
+        const _id = req.params.id;
+        const hotel = await Hotel.findOne({ _id })
+        if (hotel) {
+          return res.status(httpStatus.OK).json({
+            status: "succes",
+            data: hotel
+          });
+        } else {
+          return res.status(httpStatus.BAD_REQUEST).json({
+            message: "invalid/nonExistant id"
+          });
+        }
+      } catch (err) {
+        console.log(err)
+        return res.status(httpStatus.INTERNAL_SERVER_ERROR).json({
+          status: "error",
+          message: "something  went wrong"
+        });
+      }
+}
