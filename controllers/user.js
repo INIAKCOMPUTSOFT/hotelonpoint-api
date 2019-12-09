@@ -2,7 +2,7 @@ const jwt = require("jsonwebtoken");
 const mongoose = require("mongoose");
 const httpStatus = require("http-status-codes");
 const bcrypt = require("bcryptjs");
-const { User, validate, validateLogin } = require("../models/user");
+const { User, validate, validateLogin } = require("../models/User");
 const cloudinary = require('cloudinary').v2;
 
 cloudinary.config({
@@ -61,6 +61,7 @@ exports.userSignUp = async (req, res) => {
           {
             expiresIn: "2h"
           }
+        
         );
         return res.status(httpStatus.OK).json({
           status: "success",
