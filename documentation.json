@@ -1,0 +1,111 @@
+{
+    "propName": "iniak2",
+    "starRating": "4",
+    "roomNumbers": "24",
+    "propWebsite": "iniak.com.ng",
+    "contact": [
+    	{
+		    "conNumber": "07065336536",
+		    "email": "oyin@gmail.com",
+		    "isChainComp": true,
+		    "compName": "iniak Limited",
+		    "extra": "extra"
+    	}
+    ],
+    "country": "Nigeria",
+    "state": "bayelsa",
+    "city": "yenagoa",
+    "address": ["bayelsa", "gbaraintoru"],
+    "zipCode": "561",
+    "repApproach": false,
+    "isBreakfastAvailable": "no",
+    "isShuttleAvailable": "no",
+    "hotelAmenities": ["pool", "restaurant", "gameCenter"],
+    "rooms": [
+    	{
+    		"roomName": "presidential",
+		    "roomType": "deluxe",
+		    "roomSize": "gold",
+		    "roomsOfthisType": "2",
+		    "bedType": "water bed",
+		    "bedNumber": "3",
+		    "roomAmenities": [ "miniFridge"],
+		    "smokePolicy": "Dont do it",
+		    "occupantPolicy": "dont sleep by the window",
+		    "pricePerNight": "$200"
+    	}
+    ],
+    "freeCancellationPeriod": "1 day",
+    "paidCancellation": "$20",
+    "checkIn": "1233243243234",
+    "checkOut": "209308832094",
+    "accomodateChild": false,
+    "accomodatePet": false,
+ },
+"response": {
+    "status": "success",
+    "data": {
+        "location": {
+            "address": [
+                "bayelsa",
+                "gbaraintoru"
+            ],
+            "country": "Nigeria",
+            "state": "bayelsa",
+            "city": "yenagoa",
+            "zipCode": "561"
+        },
+        "hotelAmen": {
+            "hotelAmenities": [
+                "pool",
+                "restaurant",
+                "gameCenter"
+            ],
+            "isBreakfastAvailable": "no",
+            "isShuttleAvailable": "no"
+        },
+        "_id": "5dee291426d36d10849f929c",
+        "property": {
+            "propName": "iniak2",
+            "starRating": "4",
+            "roomNumbers": "24",
+            "propWebsite": "iniak.com.ng"
+        },
+        "repApproach": false,
+        "cancellation": {
+            "freeCancellationPeriod": "1 day",
+            "paidCancellation": "$20",
+            "checkIn": "1233243243234",
+            "checkOut": "209308832094",
+            "accomodateChild": false,
+            "accomodatePet": false
+        },
+        "contact": [
+            {
+                "_id": "5dee291426d36d10849f929d",
+                "conNumber": "07065336536",
+                "email": "oyin@gmail.com",
+                "isChainComp": true,
+                "compName": "iniak Limited"
+            }
+        ],
+        "rooms": [
+            {
+                "roomAmenities": [
+                    "miniFridge"
+                ],
+                "_id": "5dee291426d36d10849f929e",
+                "roomName": "presidential",
+                "roomType": "deluxe",
+                "roomSize": "gold",
+                "roomsOfthisType": "2",
+                "bedType": "water bed",
+                "bedNumber": "3",
+                "smokePolicy": "Dont do it",
+                "occupantPolicy": "dont sleep by the window",
+                "pricePerNight": "$200"
+            }
+        ],
+        "__v": 0
+    }
+}
