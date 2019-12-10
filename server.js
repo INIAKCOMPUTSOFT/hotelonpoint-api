@@ -36,10 +36,12 @@ mongoose.connect(mongo, {
 
 const userRouter = require('./routes/user')
 const hotelRouter = require('./routes/hotel')
+const blogRouter = require('./routes/blog')
 
 app.get('/', (req, res) => res.send('Welcome to HotelOnPoint-API'))
 app.use('/user', userRouter)
 app.use('/hotel', hotelRouter)
+app.use('/blog', blogRouter)
 
 const port = process.env.PORT || 3000
 app.listen(port, () => console.log(`app listening on port ${port}`))

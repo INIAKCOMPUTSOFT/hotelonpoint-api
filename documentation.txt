@@ -1,4 +1,21 @@
-{
+"endpoints": "https://calm-anchorage-14244.herokuapp.com/hotel"
+
+user Endpoint: {
+    get: "https://calm-anchorage-14244.herokuapp.com/user",
+    get: "https://calm-anchorage-14244.herokuapp.com/user/5dece32d75ad5e34dcc2b8db",
+    post: "https://calm-anchorage-14244.herokuapp.com/user",
+    post: "https://calm-anchorage-14244.herokuapp.com/user/login"
+    put: "https://calm-anchorage-14244.herokuapp.com/user/image/5dece32d75ad5e34dcc2b8db"
+    put: "https://calm-anchorage-14244.herokuapp.com/user/5dece32d75ad5e34dcc2b8db"
+}
+
+hotel endpoints: {
+    get: "https://calm-anchorage-14244.herokuapp.com/hotel",
+    get: "https://calm-anchorage-14244.herokuapp.com/hotel/5dee291426d36d10849f929d",
+    post: "https://calm-anchorage-14244.herokuapp.com/hotel" with body 
+}
+
+body = {
     "propName": "iniak2",
     "starRating": "4",
     "roomNumbers": "24",
