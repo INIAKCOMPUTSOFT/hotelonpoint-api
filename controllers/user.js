@@ -5,6 +5,8 @@ const bcrypt = require("bcryptjs");
 const { User, validate, validateLogin } = require("../models/User");
 const cloudinary = require('cloudinary').v2;
 
+const { validateLoginData, validateSignUpData } = require('../util/validators')
+
 cloudinary.config({
   cloud_name: process.env.CLOUD_NAME,
   api_key: process.env.API_KEY,
@@ -22,15 +24,15 @@ exports.userSignUp = async (req, res) => {
         isHotelOwner
       } = req.body;
 
-      const { error } = validate({
+      const data = {
         fullName,
         email,
         password,
-      });
-      if (error)
-        return res
-          .status(httpStatus.BAD_REQUEST)
-          .json({ message: error.details[0].message });
+        confirmPassword,
+        isHotelOwner
+      }
+      const {valid, errors} = validateSignUpData(data);
+      if(!valid) return res.status(400).json(errors)
       if (password !== confirmPassword)
         return res
           .status(httpStatus.PRECONDITION_FAILED)
@@ -78,15 +80,16 @@ exports.userSignUp = async (req, res) => {
 
 exports.login = async (req, res) => {
   const { email, password } = req.body;
-  const { error } = validateLogin({ email, password });
-  if (error)
-    return res
-      .status(httpStatus.BAD_REQUEST)
-      .json({ message: error.details[0].message });
+
+  const data = {email, password}
+
+  const {valid, errors} = validateLoginData(data);
+  if(!valid) return res.status(400).json(errors)
   try {
     const user = await User.findOne({ email: email.toLowerCase() });
     if (user) {
       const very = await bcrypt.compare(password, user.password);
+      console.log(very)
       if (very) {
         const token = jwt.sign(
           {
@@ -104,14 +107,16 @@ exports.login = async (req, res) => {
         });
       } else {
         return res.status(httpStatus.BAD_REQUEST).json({
-          message: "Auth Failed"
+          message: "Auth Failed 1"
         });
       }
+    } else {
+      return res.status(httpStatus.BAD_REQUEST).json({
+        message: "user does not Exist Register"
+      });
     }
-    return res.status(httpStatus.BAD_REQUEST).json({
-      message: "Auth Failed"
-    });
   } catch (error) {
+    console.log(error)
     return res.status(httpStatus.INTERNAL_SERVER_ERROR).json({
       status: "error",
       message: "something  went wrong"
