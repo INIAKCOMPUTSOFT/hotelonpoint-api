@@ -117,7 +117,10 @@ const hotelSchema = new Schema({
     contact: [contactSchema],
     imagerUrl: {
         type: String,
-        required: true
+    },
+    author: {
+        type: Schema.Types.ObjectId,
+        ref: 'User'
     },
     location: locationSchema,
     repApproach: {

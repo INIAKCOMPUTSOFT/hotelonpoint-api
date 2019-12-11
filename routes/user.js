@@ -30,9 +30,10 @@ const upload = multer({dest: 'uploads/'})
 
 router.get('/', userController.getAllUser);
 router.post('/', userController.userSignUp);
+router.post('/me', authGaurd, userController.getAuthUser)
 router.post('/login', userController.login);
 router.get('/:id', userController.getAuser);
 router.put('/image/:id', upload.single('profileImage'), userController.updateProfilePic);
-router.put('/:id', userController.updateDetails);
+router.put('/:id', authGaurd, userController.updateDetails);
 
 module.exports = router;
