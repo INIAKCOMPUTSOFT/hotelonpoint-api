@@ -233,7 +233,6 @@ exports.getAuthUser = async(req, res) => {
                 message: 'User Fetch successful',
                 userData: user
             })
-            console.log(req.user)
         } else {
             res.status(404).json({error: 'Unauthorized'})
         }
