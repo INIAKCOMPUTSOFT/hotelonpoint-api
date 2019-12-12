@@ -112,7 +112,7 @@ exports.login = async (req, res) => {
       }
     } else {
       return res.status(httpStatus.BAD_REQUEST).json({
-        message: "user does not Exist Register"
+        message: "user does not Exist. Click the SignUp to Register"
       });
     }
   } catch (error) {
