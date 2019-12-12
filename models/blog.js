@@ -32,7 +32,7 @@ const blogSchema = Schema({
         type: String,
     },
     image: {
-        type: String,
+        type: Array,
         required: true
     },
     author: {
