@@ -233,10 +233,16 @@ exports.getAuthUser = async(req, res) => {
     await User.findOne({ _id : user}).exec()
     .then(user => {
         if(user){
+          const cred = {
+            _id: user._id,
+            fullName: user.fullName,
+            email: user.email,
+            imageUrl: user.imageUrl
+          }
             req.user = user
             res.status(200).json({
                 message: 'User Fetch successful',
-                userData: user
+                userData: cred
             })
         } else {
             res.status(404).json({error: 'Unauthorized'})
