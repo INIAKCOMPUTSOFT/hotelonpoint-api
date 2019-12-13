@@ -71,8 +71,7 @@ const hotelAmenSchema = {
 
 const roomSchema = {
     roomName: {
-        type: String,
-        required: true
+        type: String
     },
     roomType: {
         type: String,

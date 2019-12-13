@@ -8,7 +8,6 @@ const cloudinary = require('../cloudinary');
 
 exports.blogPost = async (req, res) => {
   Blog.find({ title : req.body.title.toLowerCase() }).then(async rest => {
-    console.log(rest)
     if(rest.length >= 1){
       return  res.status(httpStatus.OK).json({
         message: "Post Already Exists Try another",
@@ -23,7 +22,6 @@ exports.blogPost = async (req, res) => {
         const newPath = await uploader(path);
 
         urls.push(newPath);
-        console.log('1',newPath)
         fs.unlinkSync(path);
       }
 

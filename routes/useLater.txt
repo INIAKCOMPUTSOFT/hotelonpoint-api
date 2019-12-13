@@ -1,0 +1,52 @@
+prop = new Hotel({
+        _id: new mongoose.Types.ObjectId(),
+        property: {
+          propName,
+          starRating,
+          roomNumbers,
+          propWebsite
+        },
+        location: {
+          country,
+          state,
+          city,
+          address,
+          zipCode,
+          mapLocation
+        },
+        author: req.userData._id,
+        repApproach,
+        hotelAmen: {
+          isBreakfastAvailable,
+          BreakfastCharge,
+          isShuttleAvailable,
+          shuttleCharge,
+          hotelAmenities
+        },
+        cancellation: {
+          freeCancellationPeriod,
+          paidCancellation,
+          checkIn,
+          checkOut,
+          accomodateChild,
+          accomodatePet
+        }
+      });
+       contact.forEach(concat => {
+         prop.contact.push(concat);
+       });
+       rooms.forEach(concat => {
+         prop.rooms.push(concat);
+       });
+
+       prop
+         .save()
+         .then(resp => {
+           return res.status(httpStatus.OK).json({
+             status: "success",
+             data: resp
+           });
+         })
+         .catch(err => {
+           console.log(err);
+         });
