@@ -7,8 +7,9 @@ const fs = require('fs')
 const cloudinary = require('../cloudinary');
 
 exports.blogPost = async (req, res) => {
-  Blog.find({ title: req.body.title.toLowerCase() }).then(async rest => {
-    if(rest){
+  Blog.find({ title : req.body.title.toLowerCase() }).then(async rest => {
+    console.log(rest)
+    if(rest.length >= 1){
       return  res.status(httpStatus.OK).json({
         message: "Post Already Exists Try another",
       });
@@ -27,7 +28,7 @@ exports.blogPost = async (req, res) => {
       }
 
         const newPost = {
-          title: req.body.title,
+          title: req.body.title.toLowerCase(),
           content: req.body.content,
           image: urls,
           // author: req.userData._id
