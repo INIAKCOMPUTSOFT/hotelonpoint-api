@@ -7,44 +7,55 @@ const fs = require('fs')
 const cloudinary = require('../cloudinary');
 
 exports.blogPost = async (req, res) => {
-  const uploader = async path => await cloudinary.uploads(path, "Images");
-  if (req.method === "POST") {
-    const urls = [];
-    const files = req.files;
-    for (const file of files) {
-      const { path } = file;
-      const newPath = await uploader(path);
-
-      urls.push(newPath);
-      console.log('1',newPath)
-      fs.unlinkSync(path);
-    }
-
-    const newPost = {
-      title: req.body.title,
-      content: req.body.content,
-      image: urls,
-      // author: req.userData._id
-    };
-    new Blog(newPost)
-      .save()
-      .then(story => {
-        if (story) {
-          res.status(httpStatus.OK).json({
-            message: "Post Added successfully",
-            story
-          });
-        }
-      })
-      .catch(err => {
-        console.log(err);
-        res.status(httpStatus.INTERNAL_SERVER_ERROR).json({ error: err });
+  Blog.find({ title: req.body.title.toLowerCase() }).then(async rest => {
+    if(rest){
+      return  res.status(httpStatus.OK).json({
+        message: "Post Already Exists Try another",
       });
+    }
+    const uploader = async path => await cloudinary.uploads(path, "Images");
+    if (req.method === "POST") {
+      const urls = [];
+      const files = req.files;
+      for (const file of files) {
+        const { path } = file;
+        const newPath = await uploader(path);
+
+        urls.push(newPath);
+        console.log('1',newPath)
+        fs.unlinkSync(path);
+      }
+
+        const newPost = {
+          title: req.body.title,
+          content: req.body.content,
+          image: urls,
+          // author: req.userData._id
+        };
+        new Blog(newPost)
+          .save()
+          .then(story => {
+            if (story) {
+              res.status(httpStatus.OK).json({
+                message: "Post Added successfully",
+                story
+              });
+            }
+          })
+          .catch(err => {
+            console.log(err);
+            res.status(httpStatus.INTERNAL_SERVER_ERROR).json({ error: err });
+          });
+    
   } else {
     res.status(405).json({
       err: "images not uploaded successfully"
     });
-  }
+  }}).catch(err => {
+    console.log(err);
+    res.status(httpStatus.INTERNAL_SERVER_ERROR).json({ error: err });
+  });
+  
 };
 
 exports.getBlogs = (req, res) => {
