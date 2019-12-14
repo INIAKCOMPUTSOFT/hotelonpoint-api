@@ -1,11 +1,11 @@
-const express = require('express');
+const express = require("express");
 const router = express.Router();
-const hotelController = require('../controllers/hotel')
-const upload = require('../multer')
-const authGaurd = require('../util/authGaurd')
+const hotelController = require("../controllers/hotel");
+const upload = require("../multer");
+const authGaurd = require("../util/authGaurd");
 
-router.post('/', upload.array('image'), authGaurd,  hotelController.addHotel);
-router.get('/', hotelController.getHotels);
-router.get('/:id', hotelController.getAhotel);
+router.post("/", upload.array("image"), hotelController.addHotel);
+router.get("/", hotelController.getHotels);
+router.get("/:id", hotelController.getAhotel);
 
-module.exports = router
+module.exports = router;
