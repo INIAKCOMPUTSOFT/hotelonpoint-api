@@ -6,44 +6,49 @@ const cloudinary = require("../cloudinary");
 
 exports.addHotel = (req, res) => {
   const {
-    propName,
+    hotelName,
+    hotelWebsite,
     starRating,
-    roomNumber,
-    propWebsite,
-    contact,
-    conNumber,
-    email,
-    isChainComp,
-    compName,
     country,
     state,
     city,
-    address,
     zipCode,
-    mapLocation,
-    isBreakfastAvailable,
-    repApproach,
-    BreakfastCharge,
-    isShuttleAvailable,
-    shuttleCharge,
-    roomAmenities,
+    isPropertyGroup,
+    compName,
+    hotelDescription,
+    propertyOwner,
+    propertyOwnerPhoneOne,
+    propertyOwnerPhoneTwo,
+    propertyOwnerEmail,
+    frontDesk,
+    frontDeskPhoneOne,
+    frontDeskPhoneTwo,
+    frontDeskOwnerEmail,
+    headOfReservationOne,
+    headOfReservationPhoneOne,
+    headOfReservationPhoneTwo,
+    headOfReservationOneEmail,
+    headOfReservationTwo,
+    headOfReservationTwoPhoneOne,
+    headOfReservationTwoPhoneTwo,
+    headOfReservationTwoEmail,
+    headOfOperationOne,
+    headOfOperationPhoneOne,
+    headOfOperationPhoneTwo,
+    headOfOperationOneEmail,
+    headOfOperationTwo,
+    headOfOperationTwoPhoneOne,
+    headOfOperationTwoPhoneTwo,
+    headOfOperationTwoEmail,
+    smokingPolicy,
+    paymentMethod,
     hotelAmenities,
-    rooms,
-    freeCancellationPeriod,
-    paidCancellation,
     checkIn,
     checkOut,
-    pool,
-    pets,
-    restaurant,
-    garden,
-    wifi,
-    bar,
-    roomService,
-    fitnessCenter,
-    frontDesk,
-    accomodateChild,
-    accomodatePet
+    freeBooking,
+    paidBooking,
+    otherPaymentMethod,
+    moreHotelAmenities
   } = req.body;
 
   Hotel.find({ "property.propName": propName })
@@ -69,77 +74,63 @@ exports.addHotel = (req, res) => {
 
         prop = new Hotel({
           _id: new mongoose.Types.ObjectId(),
-          property: {
-            propName,
+          propertyInfo: {
+            hotelName,
+            hotelWebsite,
             starRating,
-            roomNumber,
-            propWebsite
-          },
-          location: {
             country,
             state,
             city,
-            address,
             zipCode,
-            mapLocation
+            isPropertyGroup,
+            compName,
+            hotelDescription
           },
-          // author: req.userData._id,
-          repApproach,
-          hotelAmen: {
-            isBreakfastAvailable,
-            BreakfastCharge,
-            isShuttleAvailable,
-            shuttleCharge,
-            pool,
-            pets,
-            restaurant,
-            garden,
-            wifi,
-            bar,
-            roomService,
-            fitnessCenter,
-            frontDesk
+          imagerUrl: urls,
+          managementDetails: {
+            propertyOwner,
+            propertyOwnerPhoneOne,
+            propertyOwnerPhoneTwo,
+            propertyOwnerEmail,
+            frontDesk,
+            frontDeskPhoneOne,
+            frontDeskPhoneTwo,
+            frontDeskOwnerEmail,
+            headOfReservationOne,
+            headOfReservationPhoneOne,
+            headOfReservationPhoneTwo,
+            headOfReservationOneEmail,
+            headOfReservationTwo,
+            headOfReservationTwoPhoneOne,
+            headOfReservationTwoPhoneTwo,
+            headOfReservationTwoEmail,
+            headOfOperationOne,
+            headOfOperationPhoneOne,
+            headOfOperationPhoneTwo,
+            headOfOperationOneEmail,
+            headOfOperationTwo,
+            headOfOperationTwoPhoneOne,
+            headOfOperationTwoPhoneTwo,
+            headOfOperationTwoEmail
           },
-          roomAmenities: [],
-          cancellation: {
-            freeCancellationPeriod,
-            paidCancellation,
+          hotelPolicy: {
+            smokingPolicy,
+            paymentMethod,
+            hotelAmenities,
             checkIn,
             checkOut,
-            accomodateChild,
-            accomodatePet
-          },
-          imagerUrl: urls
+            freeBooking,
+            paidBooking,
+            otherPaymentMethod,
+            moreHotelAmenities
+          }
         });
-        if (!Array.isArray(contact)) {
-          prop.contact.push(contact);
-        } else {
-          contact.forEach(concat => {
-            prop.contact.push(concat);
-          });
-        }
 
-        // if (!Array.isArray(hotelAmenities)) {
-        //   prop.hotelAmenities.push(hotelAmenities);
-        // } else {
-        //   hotelAmenities.forEach(concat => {
-        //     prop.hotelAmenities.push(concat);
-        //   });
-        // }
-
-        if (!Array.isArray(roomAmenities)) {
-          prop.roomAmenities.push(roomAmenities);
+        if (!Array.isArray(moreHotelPolicies)) {
+          prop.roomAmenities.push(moreHotelPolicies);
         } else {
-          roomAmenities.forEach(concat => {
-            prop.roomAmenities.push(concat);
-          });
-        }
-
-        if (!Array.isArray(address)) {
-          prop.address.push(address);
-        } else {
-          address.forEach(concat => {
-            prop.address.push(concat);
+          moreHotelPolicies.forEach(concat => {
+            prop.hotelPolicy.moreHotelPolicies.push(concat);
           });
         }
 

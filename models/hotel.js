@@ -1,41 +1,18 @@
 const mongoose = require("mongoose");
 const Schema = mongoose.Schema;
 
-const propertySchema = {
-  propName: {
+const propertyInfoSchema = {
+  hotelName: {
     type: String,
     required: true
   },
-  starRating: {
+  hotelWebsite: {
     type: String
   },
-  roomNumber: {
+  starRating: {
     type: String,
     required: true
   },
-  propWebsite: String
-};
-// const contactSchema = {
-//     conNumber: {
-//         type: String,
-//         required: true
-//     },
-//     altNumber: String,
-//     email: {
-//         type: String,
-//         required: true
-//     },
-//     isChainComp: {
-//         type: Boolean,
-//         required: true
-//     },
-//     compName: String
-// }
-
-const addressSchema = String;
-
-const locationSchema = {
-  _id: mongoose.Schema.Types.ObjectId,
   country: {
     type: String,
     required: true
@@ -49,112 +26,138 @@ const locationSchema = {
     required: true
   },
   zipCode: {
+    type: String
+  },
+  isPropertyGroup: {
     type: String,
     required: true
   },
-  mapLocation: String
-};
-
-const hotelAmenSchema = {
-  _id: mongoose.Schema.Types.ObjectId,
-  isBreakfastAvailable: {
+  compName: {
+    type: String
+  },
+  hotelDescription: {
     type: String,
-    required: true
-  },
-  BreakfastCharge: String,
-  isShuttleAvailable: {
-    type: String,
-    required: true
-  },
-  shuttleCharge: String,
-  pool: Boolean,
-  pets: Boolean,
-  restaurant: Boolean,
-  garden: Boolean,
-  wif: Boolean,
-  bar: Boolean,
-  roomService: Boolean,
-  fitnessCenter: Boolean,
-  frontDesk: Boolean
-};
-
-// const roomSchema = {
-//     _id: mongoose.Schema.Types.ObjectId,
-//     roomName: {
-//         type: String
-//     },
-//     roomType: {
-//         type: String,
-//     },
-//     roomSize: {
-//         type: String
-//     },
-//     roomsOfthisType: {
-//         type: String
-//     },
-//     bedType: String,
-//     bedNumber: String,
-//     roomAmenities: [],
-//     smokePolicy: String,
-//     occupantPolicy: String,
-//     pricePerNight: String
-// }
-
-const cancellationSchema = {
-  _id: mongoose.Schema.Types.ObjectId,
-  freeCancellationPeriod: String,
-  paidCancellation: String,
-  checkIn: {
-    type: String,
-    required: true
-  },
-  checkOut: {
-    type: String,
-    required: true
-  },
-  accomodateChild: {
-    type: Boolean,
-    required: true
-  },
-  accomodatePet: {
-    type: Boolean,
     required: true
   }
 };
 
+const managementDetailsSchema = {
+  propertyOwner: {
+    type: String,
+    required: true
+  },
+  propertyOwnerPhoneOne: {
+    type: String,
+    required: true
+  },
+  propertyOwnerPhoneTwo: {
+    type: String,
+  },
+  propertyOwnerEmail: {
+    type: String,
+    required: true
+  },
+  frontDesk: {
+    type: String,
+  },
+  frontDeskPhoneOne: {
+    type: String,
+  },
+  frontDeskPhoneTwo: {
+    type: String,
+  },
+  frontDeskOwnerEmail: {
+    type: String,
+  },
+  headOfReservationOne: {
+    type: String,
+  },
+  headOfReservationPhoneOne: {
+    type: String,
+  },
+  headOfReservationPhoneTwo: {
+    type: String,
+  },
+  headOfReservationOneEmail: {
+    type: String,
+  },
+  headOfReservationTwo: {
+    type: String,
+  },
+  headOfReservationTwoPhoneOne: {
+    type: String,
+  },
+  headOfReservationTwoPhoneTwo: {
+    type: String,
+  },
+  headOfReservationTwoEmail: {
+    type: String,
+  },
+  headOfOperationOne: {
+    type: String,
+  },
+  headOfOperationPhoneOne: {
+    type: String,
+  },
+  headOfOperationPhoneTwo: {
+    type: String,
+  },
+  headOfOperationOneEmail: {
+    type: String,
+  },
+  headOfOperationTwo: {
+    type: String,
+  },
+  headOfOperationTwoPhoneOne: {
+    type: String,
+  },
+  headOfOperationTwoPhoneTwo: {
+    type: String,
+  },
+  headOfOperationTwoEmail: {
+    type: String,
+  }
+};
+
+const hotelPolicySchema = {
+  smokingPolicy: {
+    type: String,
+  },
+  paymentMethod: {
+    type: Array,
+  },
+  hotelAmenities: {
+    type: Array,
+  },
+  checkIn: String,
+  checkOut: String,
+  freeBooking: String,
+  paidBooking: String,
+  otherPaymentMethod: String,
+  moreHotelAmenities: Array,
+  moreHotelAmenities: Array
+}
+
 const hotelSchema = new Schema({
   _id: mongoose.Schema.Types.ObjectId,
-  property: propertySchema,
-  contact: {
-    type: Array
-  },
   imagerUrl: {
-    type: Array
+    type: Array,
+    required: true
   },
+  propertyInfo: propertyInfoSchema,
+  managementDetails: managementDetailsSchema,
+  hotelPolicy: hotelPolicySchema,
   author: {
     type: Schema.Types.ObjectId,
     ref: "User"
   },
-  location: locationSchema,
-  repApproach: {
-    type: Boolean,
-    required: true
-  },
-  repFullName: {
-    type: String
-  },
-  roomAmenities: {
-    type: Array
-  },
-
-  hotelAmen: hotelAmenSchema,
-  rooms: {
-    type: Array
-  },
-  address: {
-    type: Array
-  },
-  cancellation: cancellationSchema
+  // repApproach: {
+  //   type: Boolean,
+  //   required: true
+  // },
+  // repFullName: {
+  //   type: String
+  // },
 });
 
 const Hotel = mongoose.model("Hotel", hotelSchema);
