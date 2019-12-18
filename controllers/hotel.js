@@ -130,7 +130,6 @@ exports.addHotel = (req, res) => {
           },
           approved: false
         });
-        console.log("1", headOfOperationPhoneTwo);
         if (!Array.isArray(moreHotelPolicies)) {
           prop.hotelPolicy.moreHotelPolicies.push(moreHotelPolicies);
         } else {
@@ -138,7 +137,6 @@ exports.addHotel = (req, res) => {
             prop.hotelPolicy.moreHotelPolicies.push(concat);
           });
         }
-        console.log("2", headOfOperationPhoneOne);
         if (!Array.isArray(rooms)) {
           prop.rooms.push(rooms);
         } else {
