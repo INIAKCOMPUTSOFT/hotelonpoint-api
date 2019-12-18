@@ -157,6 +157,10 @@ const hotelSchema = new Schema({
   },
   repApproach: {
     type: String
+  },
+  approved: {
+    type: Boolean,
+    required: true
   }
 });
 

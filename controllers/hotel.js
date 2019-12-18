@@ -127,7 +127,8 @@ exports.addHotel = (req, res) => {
             paidBooking,
             otherPaymentMethod,
             moreHotelAmenities
-          }
+          },
+          approved: false
         });
         console.log("1", headOfOperationPhoneTwo);
         if (!Array.isArray(moreHotelPolicies)) {
