@@ -51,83 +51,83 @@ const managementDetailsSchema = {
     required: true
   },
   propertyOwnerPhoneTwo: {
-    type: String,
+    type: String
   },
-  propertyOwnerEmail: {
+  propOwnerEmail: {
     type: String,
     required: true
   },
   frontDesk: {
-    type: String,
+    type: String
   },
   frontDeskPhoneOne: {
-    type: String,
+    type: String
   },
   frontDeskPhoneTwo: {
-    type: String,
+    type: String
   },
   frontDeskOwnerEmail: {
-    type: String,
+    type: String
   },
   headOfReservationOne: {
-    type: String,
+    type: String
   },
   headOfReservationPhoneOne: {
-    type: String,
+    type: String
   },
   headOfReservationPhoneTwo: {
-    type: String,
+    type: String
   },
   headOfReservationOneEmail: {
-    type: String,
+    type: String
   },
   headOfReservationTwo: {
-    type: String,
+    type: String
   },
   headOfReservationTwoPhoneOne: {
-    type: String,
+    type: String
   },
   headOfReservationTwoPhoneTwo: {
-    type: String,
+    type: String
   },
   headOfReservationTwoEmail: {
-    type: String,
+    type: String
   },
   headOfOperationOne: {
-    type: String,
+    type: String
   },
   headOfOperationPhoneOne: {
-    type: String,
+    type: String
   },
   headOfOperationPhoneTwo: {
-    type: String,
+    type: String
   },
   headOfOperationOneEmail: {
-    type: String,
+    type: String
   },
   headOfOperationTwo: {
-    type: String,
+    type: String
   },
   headOfOperationTwoPhoneOne: {
-    type: String,
+    type: String
   },
   headOfOperationTwoPhoneTwo: {
-    type: String,
+    type: String
   },
   headOfOperationTwoEmail: {
-    type: String,
+    type: String
   }
 };
 
 const hotelPolicySchema = {
   smokingPolicy: {
-    type: String,
+    type: String
   },
   paymentMethod: {
-    type: Array,
+    type: Array
   },
   hotelAmenities: {
-    type: Array,
+    type: Array
   },
   checkIn: String,
   checkOut: String,
@@ -135,12 +135,16 @@ const hotelPolicySchema = {
   paidBooking: String,
   otherPaymentMethod: String,
   moreHotelAmenities: Array,
-  moreHotelAmenities: Array
-}
+  moreHotelPolicies: Array
+};
 
 const hotelSchema = new Schema({
   _id: mongoose.Schema.Types.ObjectId,
   imagerUrl: {
+    type: Array,
+    required: true
+  },
+  rooms: {
     type: Array,
     required: true
   },
@@ -151,13 +155,9 @@ const hotelSchema = new Schema({
     type: Schema.Types.ObjectId,
     ref: "User"
   },
-  // repApproach: {
-  //   type: Boolean,
-  //   required: true
-  // },
-  // repFullName: {
-  //   type: String
-  // },
+  repApproach: {
+    type: String
+  }
 });
 
 const Hotel = mongoose.model("Hotel", hotelSchema);

@@ -11,15 +11,17 @@ exports.addHotel = (req, res) => {
     starRating,
     country,
     state,
+    rooms,
     city,
     zipCode,
     isPropertyGroup,
     compName,
     hotelDescription,
+    moreHotelPolicies,
     propertyOwner,
     propertyOwnerPhoneOne,
     propertyOwnerPhoneTwo,
-    propertyOwnerEmail,
+    propOwnerEmail,
     frontDesk,
     frontDeskPhoneOne,
     frontDeskPhoneTwo,
@@ -41,6 +43,7 @@ exports.addHotel = (req, res) => {
     headOfOperationTwoPhoneTwo,
     headOfOperationTwoEmail,
     smokingPolicy,
+    repApproach,
     paymentMethod,
     hotelAmenities,
     checkIn,
@@ -51,7 +54,7 @@ exports.addHotel = (req, res) => {
     moreHotelAmenities
   } = req.body;
 
-  Hotel.find({ "property.propName": propName })
+  Hotel.find({ "property.hotelName": hotelName })
     .then(async prop => {
       if (prop.length >= 1) {
         return res.status(httpStatus.BAD_REQUEST).json({
@@ -91,7 +94,7 @@ exports.addHotel = (req, res) => {
             propertyOwner,
             propertyOwnerPhoneOne,
             propertyOwnerPhoneTwo,
-            propertyOwnerEmail,
+            propOwnerEmail,
             frontDesk,
             frontDeskPhoneOne,
             frontDeskPhoneTwo,
@@ -113,6 +116,7 @@ exports.addHotel = (req, res) => {
             headOfOperationTwoPhoneTwo,
             headOfOperationTwoEmail
           },
+          repApproach,
           hotelPolicy: {
             smokingPolicy,
             paymentMethod,
@@ -125,15 +129,15 @@ exports.addHotel = (req, res) => {
             moreHotelAmenities
           }
         });
-
+        console.log("1", headOfOperationPhoneTwo);
         if (!Array.isArray(moreHotelPolicies)) {
-          prop.roomAmenities.push(moreHotelPolicies);
+          prop.hotelPolicy.moreHotelPolicies.push(moreHotelPolicies);
         } else {
           moreHotelPolicies.forEach(concat => {
             prop.hotelPolicy.moreHotelPolicies.push(concat);
           });
         }
-
+        console.log("2", headOfOperationPhoneOne);
         if (!Array.isArray(rooms)) {
           prop.rooms.push(rooms);
         } else {
