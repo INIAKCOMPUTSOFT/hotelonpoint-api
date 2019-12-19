@@ -89,6 +89,7 @@ exports.addHotel = (req, res) => {
             compName,
             hotelDescription
           },
+          author: req.userData._id,
           imagerUrl: urls,
           managementDetails: {
             propertyOwner,

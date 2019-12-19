@@ -158,6 +158,10 @@ const hotelSchema = new Schema({
   repApproach: {
     type: String
   },
+  author: {
+    type: Schema.Types.ObjectId,
+    ref: 'User'
+},
   approved: {
     type: Boolean,
     required: true
