@@ -129,6 +129,14 @@ const hotelPolicySchema = {
   hotelAmenities: {
     type: Array
   },
+  isBreakfastAvailable: {
+    type: String
+  },
+  breakfastPrice: {
+    type: String
+  },
+  isShuttleAvailable: String,
+  shuttlePrice: String,
   checkIn: String,
   checkOut: String,
   freeBooking: String,
@@ -137,6 +145,16 @@ const hotelPolicySchema = {
   moreHotelAmenities: Array,
   moreHotelPolicies: Array
 };
+
+const termsAndConditionsSchema = {
+  contractName: String,
+  confirmRecipientAddress: String,
+  recipientCountry: String,
+  recipientState: String,
+  recipientCity: String,
+  recipientZipCode: String,
+  confirmAgreement: String,
+},
 
 const hotelSchema = new Schema({
   _id: mongoose.Schema.Types.ObjectId,
@@ -165,7 +183,8 @@ const hotelSchema = new Schema({
   approved: {
     type: Boolean,
     required: true
-  }
+  },
+  termsAndConditions: termsAndConditionsSchema
 });
 
 const Hotel = mongoose.model("Hotel", hotelSchema);

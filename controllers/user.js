@@ -1,6 +1,7 @@
 const jwt = require("jsonwebtoken");
 const mongoose = require("mongoose");
 const httpStatus = require("http-status-codes");
+const _ = require('lodash')
 const bcrypt = require("bcryptjs");
 const { User, validate, validateLogin } = require("../models/User");
 const cloudinary = require('cloudinary').v2;
@@ -126,7 +127,7 @@ exports.login = async (req, res) => {
 
 exports.getAllUser = async (req, res) => {
   try {
-    const users = await User.find()
+    const users = await User.find().select('-password -__v')
     if (users) {
       return res.status(httpStatus.OK).json({
         status: "succes",
@@ -150,7 +151,7 @@ exports.getAllUser = async (req, res) => {
 exports.getAuser = async(req, res) => {
   try {
     const _id = req.params.id;
-    const user = await User.findOne({ _id })
+    const user = await User.findOne({ _id }).select('-password -__v')
     if (user) {
       return res.status(httpStatus.OK).json({
         status: "succes",

@@ -46,6 +46,17 @@ exports.addHotel = (req, res) => {
     repApproach,
     paymentMethod,
     hotelAmenities,
+    isBreakfastAvailable,
+    breakfastPrice,
+    contractName,
+    confirmRecipientAddress,
+    recipientCountry,
+    recipientState,
+    recipientCity,
+    recipientZipCode,
+    confirmAgreement,
+    isShuttleAvailable,
+    shuttlePrice,
     checkIn,
     checkOut,
     freeBooking,
@@ -119,7 +130,8 @@ exports.addHotel = (req, res) => {
           },
           repApproach,
           hotelPolicy: {
-            smokingPolicy,
+            isBreakfastAvailable,
+            breakfastPrice,
             paymentMethod,
             hotelAmenities,
             checkIn,
@@ -127,7 +139,18 @@ exports.addHotel = (req, res) => {
             freeBooking,
             paidBooking,
             otherPaymentMethod,
-            moreHotelAmenities
+            moreHotelAmenities,
+            isShuttleAvailable,
+            shuttlePrice
+          },
+          termsAndConditions: {
+            contractName,
+            confirmRecipientAddress,
+            recipientCountry,
+            recipientState,
+            recipientCity,
+            recipientZipCode,
+            confirmAgreement,
           },
           approved: false
         });
@@ -170,7 +193,7 @@ exports.addHotel = (req, res) => {
 
 exports.getHotels = async (req, res) => {
   try {
-    const hotel = await Hotel.find().populate("author");
+    const hotel = await Hotel.find().populate("author", "fullName imageUrl email -_id");
     if (hotel) {
       return res.status(httpStatus.OK).json({
         status: "succes",
@@ -190,10 +213,45 @@ exports.getHotels = async (req, res) => {
   }
 };
 
+exports.getCredUserhotel = async (req, res) => {
+  try {
+    const hotel = await Hotel.find().populate("author", "fullName imageUrl email -_id");
+    const approved = []
+    const unApproved = []
+    hotel.forEach(res => {
+      if(res.author.email === req.userData.email){
+        if(res.approved){
+          approved.push(res)
+        }else {
+          unApproved.push(res)
+        }
+      }
+    })
+
+    res.status(200).json({
+      status: 'success',
+      approved: {
+        approvedCount: approved.length,
+        approved
+      },
+      unApproved: {
+        unApprovedCount: unApproved.length,
+        unApproved
+      }
+    })
+  }catch (err) {
+    console.log(err);
+    return res.status(httpStatus.INTERNAL_SERVER_ERROR).json({
+      status: "error",
+      message: "something  went wrong"
+    });
+  }
+}
+
 exports.getAhotel = async (req, res) => {
   try {
     const _id = req.params.id;
-    const hotel = await Hotel.findOne({ _id }).populate("author");
+    const hotel = await Hotel.findOne({ _id }).populate("author", "fullName imageUrl email -_id");
     if (hotel) {
       return res.status(httpStatus.OK).json({
         status: "succes",
