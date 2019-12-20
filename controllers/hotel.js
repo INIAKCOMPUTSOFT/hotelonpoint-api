@@ -178,6 +178,7 @@ exports.addHotel = (req, res) => {
           })
           .catch(err => {
             console.log(err);
+            res.status(httpStatus.BAD_REQUEST).json({ error: 'Incorrect Details. Fill Form with Correct Details' });
           });
       } else {
         res.status(405).json({
