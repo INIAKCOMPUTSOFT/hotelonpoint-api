@@ -161,10 +161,17 @@ exports.addHotel = (req, res) => {
             prop.hotelPolicy.moreHotelPolicies.push(concat);
           });
         }
-        if (!Array.isArray(rooms)) {
-          prop.rooms.push(rooms);
+
+        //algo to convert to usable arr
+        const roomss = []
+        console.log('get it', rooms)
+          rooms.forEach(room => {
+            roomss.push(JSON.parse(room))
+          })
+        if (!Array.isArray(roomss)) {
+          prop.rooms.push(roomss);
         } else {
-          rooms.forEach(concat => {
+          roomss.forEach(concat => {
             prop.rooms.push(concat);
           });
         }
@@ -270,3 +277,30 @@ exports.getAhotel = async (req, res) => {
     });
   }
 };
+
+exports.getAuthUserHotel = async (req, res) => {
+  const user = await req.userData._id
+  try {
+    const hotel = await Hotel.find()
+    const hotels = []
+    hotel.map(hot => {
+      if(hot.author == user){
+        hotels.push(hot)
+      }
+    })
+    if(hotels.length >= 1){
+      res.json({hotels})
+    }else {
+      return res.status(httpStatus.BAD_REQUEST).json({
+        status: "error",
+        message: "user is yet to upload a Hotel"
+      });
+    }
+  }catch (err) {
+    console.log(err);
+    return res.status(httpStatus.INTERNAL_SERVER_ERROR).json({
+      status: "error",
+      message: "something  went wrong"
+    });
+  }
+}
