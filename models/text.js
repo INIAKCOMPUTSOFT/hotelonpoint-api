@@ -1,0 +1,12 @@
+roomType: "Voluptatum nisi irur";
+smokingPolicy: "Aut reiciendis ad es";
+roomSize: "Adipisicing qui moll";
+roomsOfThisType: "754";
+bedType: "Magnam mollitia non ";
+bedNumber: "844";
+weekendRate: "Voluptatum provident";
+standardRate: "Obcaecati aliquam of";
+occupantNumber: "905";
+roomPrice: "92";
+roomAmenities: Array;
+moreAmenities: Array;

@@ -25,11 +25,13 @@ mongoose
 const userRouter = require("./routes/user");
 const hotelRouter = require("./routes/hotel");
 const blogRouter = require("./routes/blog");
+const roomRouter = require('./routes/room')
 
 app.get("/", (req, res) => res.send("Welcome to HotelOnPoint-API"));
 app.use("/user", userRouter);
 app.use("/hotel", hotelRouter);
 app.use("/blog", blogRouter);
+app.use('/room', roomRouter)
 
 const port = process.env.PORT || 3400;
 app.listen(port, () => console.log(`app listening on port ${port}`));
