@@ -16,10 +16,18 @@ exports.getAllRooms = (req, res) => {
           status: "error"
         });
       }
-      res.status(OK).json({
-        data: room,
-        status: "Success"
-      });
+      const rooms = room.filter(hotel => hotel.hotelId == id);
+      if (rooms.length >= 1) {
+        res.status(OK).json({
+          data: rooms,
+          status: "Success"
+        });
+      } else {
+        res.status(BAD_REQUEST).json({
+          data: "No Hotel Uploaded Yet",
+          status: "error"
+        });
+      }
     });
 };
 
@@ -70,9 +78,10 @@ exports.AddNewRoom = (req, res) => {
               fs.unlinkSync(path);
             }
 
-            prop = new Hotel({
+            prop = new Room({
               _id: new mongoose.Types.ObjectId(),
-            //   author: req.userData._id,
+              author: req.userData._id,
+              roomType,
               hotelId: _id,
               smokingPolicy,
               roomSize,
@@ -83,21 +92,21 @@ exports.AddNewRoom = (req, res) => {
               standardRate,
               occupantNumber,
               roomPrice,
-              imageUrl: urls
+              imageUrl: urls,
+              noOfOccupiedRooms: 0
             });
-
-            console.log('123', JSON.parse(moreAmenities))
-            moreAmenities.map(res => console.log('1', res))
-            if (!Array.isArray(moreAmenities)) {
-                console.log('here')
-              prop.moreAmenities.push(moreAmenities);
-            } else {
-                console.log('got')
-              moreAmenities.forEach(concat => {
-                prop.moreAmenities.push(concat);
-              });
+            if (moreAmenities !== undefined) {
+              if (!Array.isArray(moreAmenities)) {
+                console.log("here");
+                prop.moreAmenities.push(moreAmenities);
+              } else {
+                console.log("got");
+                moreAmenities.forEach(concat => {
+                  prop.moreAmenities.push(concat);
+                });
+              }
             }
-            console.log('456', roomAmenities)
+
             if (!Array.isArray(roomAmenities)) {
               prop.roomAmenities.push(roomAmenities);
             } else {
@@ -126,12 +135,10 @@ exports.AddNewRoom = (req, res) => {
           }
         })
         .catch(err => {
-          console.log(err);
           res.status(INTERNAL_SERVER_ERROR).json({ error: err });
         });
     })
     .catch(err => {
-      console.log(err);
       res.status(INTERNAL_SERVER_ERROR).json({
         status: "error",
         message: "Something went wrong."
@@ -140,67 +147,63 @@ exports.AddNewRoom = (req, res) => {
 };
 
 exports.updateRoom = async (req, res) => {
-    const {
-        roomType,
-        smokingPolicy,
-        roomSize,
-        roomsOfThisType,
-        bedType,
-        bedNumber,
-        weekendRate,
-        standardRate,
-        occupantNumber,
-        roomPrice,
-        roomAmenities,
-        moreAmenities
-      } = req.body;
-    const _id = req.params.id
-    await Room.findOne({ _id }).then(room => {
-        if(req.userData._id === room.author){
-            console.log('got here')
-            smokingPolicy,
-              roomSize,
-              roomsOfThisType,
-              bedType,
-              bedNumber,
-              weekendRate,
-              standardRate,
-              occupantNumber,
-              roomPrice,
-              roomAmenities,
-              moreAmenities
-
-
-            room.save().then(stor => {
-                res.status(200).json(stor)
-            })
-        } else {
-            res.status(401).json({message : 'unAuthorized access'}) 
-        }
-    }).catch(err => {
-        console.log(err)
-        res.status(500).json({error: err})
-    })
-}
+  const _id = req.params.id;
+  const updateOps = {};
+  for (const Ops of req.body) {
+    updateOps[Ops.propName] = Ops.value;
+  }
+  await Room.findOne({ _id }).then(async room => {
+    console.log("324", req.userData._id == room.author);
+    if (req.userData._id == room.author) {
+      await Room.update({ _id }, { $set: updateOps })
+        .then(room => {
+          res.status(200).json(room);
+        })
+        .catch(err => {
+          console.log(err);
+          res.status(500).json({ error: err });
+        });
+    } else {
+      res.status(401).json({ message: "unAuthorized access" });
+    }
+  });
+};
 
 exports.getAroom = async (req, res) => {
-    try {
-      const _id = req.params.id;
-      const hotel = await Room.findOne({ _id })
-      if (hotel) {
-        return res.status(OK).json({
-          status: "succes",
-          data: hotel
-        });
-      }
-      return res.status(BAD_REQUEST).json({
-        message: "invalid/nonExistant id"
-      });
-    } catch (err) {
-      console.log(err);
-      return res.status(INTERNAL_SERVER_ERROR).json({
-        status: "error",
-        message: "something  went wrong"
+  try {
+    const _id = req.params.id;
+    const hotel = await Room.findOne({ _id });
+    if (hotel) {
+      return res.status(OK).json({
+        status: "succes",
+        data: hotel
       });
     }
-  };
+    return res.status(BAD_REQUEST).json({
+      message: "invalid/nonExistant id"
+    });
+  } catch (err) {
+    console.log(err);
+    return res.status(INTERNAL_SERVER_ERROR).json({
+      status: "error",
+      message: "something  went wrong"
+    });
+  }
+};
+
+exports.deleteRoom = (req, res) => {
+  const _id = req.params.id;
+  Room.deleteOne({ _id })
+    .then(result => {
+      console.log(result);
+      res
+        .status(OK)
+        .json({ message: "Room Deleted Successfully", data: "success" });
+    })
+    .catch(err => {
+      console.log(err);
+      res.status(INTERNAL_SERVER_ERROR).json({
+        error: err
+      });
+    });
+};

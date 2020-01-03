@@ -3,7 +3,7 @@ const Schema = mongoose.Schema;
 
 const roomSchema = new Schema({
   _id: mongoose.Schema.Types.ObjectId,
-  imagerUrl: {
+  imageUrl: {
     type: Array
   },
   hotelId: {
@@ -39,11 +39,11 @@ const roomSchema = new Schema({
     required: true
   },
   weekendRate: {
-    type: String,
+    type: Number,
     required: true
   },
   standardRate: {
-    type: String,
+    type: Number,
     required: true
   },
   occupantNumber: {
@@ -51,7 +51,7 @@ const roomSchema = new Schema({
     required: true
   },
   roomPrice: {
-    type: String,
+    type: Number,
     required: true
   },
   roomAmenities: {
@@ -59,6 +59,10 @@ const roomSchema = new Schema({
   },
   moreAmenities: {
     type: Array
+  },
+  noOfOccupiedRooms: {
+    type: String,
+    required: true
   }
 });
 

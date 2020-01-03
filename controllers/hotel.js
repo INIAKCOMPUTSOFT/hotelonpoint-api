@@ -150,7 +150,7 @@ exports.addHotel = (req, res) => {
             recipientState,
             recipientCity,
             recipientZipCode,
-            confirmAgreement,
+            confirmAgreement
           },
           approved: false
         });
@@ -163,11 +163,11 @@ exports.addHotel = (req, res) => {
         }
 
         //algo to convert to usable arr
-        const roomss = []
-        console.log('get it', rooms)
-          rooms.forEach(room => {
-            roomss.push(JSON.parse(room))
-          })
+        const roomss = [];
+        console.log("get it", rooms);
+        rooms.forEach(room => {
+          roomss.push(JSON.parse(room));
+        });
         if (!Array.isArray(roomss)) {
           prop.rooms.push(roomss);
         } else {
@@ -185,7 +185,9 @@ exports.addHotel = (req, res) => {
           })
           .catch(err => {
             console.log(err);
-            res.status(httpStatus.BAD_REQUEST).json({ error: 'Incorrect Details. Fill Form with Correct Details' });
+            res.status(httpStatus.BAD_REQUEST).json({
+              error: "Incorrect Details. Fill Form with Correct Details"
+            });
           });
       } else {
         res.status(405).json({
@@ -201,7 +203,10 @@ exports.addHotel = (req, res) => {
 
 exports.getHotels = async (req, res) => {
   try {
-    const hotel = await Hotel.find().populate("author", "fullName imageUrl email -_id");
+    const hotel = await Hotel.find().populate(
+      "author",
+      "fullName imageUrl email -_id"
+    );
     if (hotel) {
       return res.status(httpStatus.OK).json({
         status: "succes",
@@ -223,21 +228,24 @@ exports.getHotels = async (req, res) => {
 
 exports.getCredUserhotel = async (req, res) => {
   try {
-    const hotel = await Hotel.find().populate("author", "fullName imageUrl email -_id");
-    const approved = []
-    const unApproved = []
+    const hotel = await Hotel.find().populate(
+      "author",
+      "fullName imageUrl email -_id"
+    );
+    const approved = [];
+    const unApproved = [];
     hotel.forEach(res => {
-      if(res.author.email === req.userData.email){
-        if(res.approved){
-          approved.push(res)
-        }else {
-          unApproved.push(res)
+      if (res.author.email === req.userData.email) {
+        if (res.approved) {
+          approved.push(res);
+        } else {
+          unApproved.push(res);
         }
       }
-    })
+    });
 
     res.status(200).json({
-      status: 'success',
+      status: "success",
       approved: {
         approvedCount: approved.length,
         approved
@@ -246,20 +254,23 @@ exports.getCredUserhotel = async (req, res) => {
         unApprovedCount: unApproved.length,
         unApproved
       }
-    })
-  }catch (err) {
+    });
+  } catch (err) {
     console.log(err);
     return res.status(httpStatus.INTERNAL_SERVER_ERROR).json({
       status: "error",
       message: "something  went wrong"
     });
   }
-}
+};
 
 exports.getAhotel = async (req, res) => {
   try {
     const _id = req.params.id;
-    const hotel = await Hotel.findOne({ _id }).populate("author", "fullName imageUrl email -_id");
+    const hotel = await Hotel.findOne({ _id }).populate(
+      "author",
+      "fullName imageUrl email -_id"
+    );
     if (hotel) {
       return res.status(httpStatus.OK).json({
         status: "succes",
@@ -279,28 +290,28 @@ exports.getAhotel = async (req, res) => {
 };
 
 exports.getAuthUserHotel = async (req, res) => {
-  const user = await req.userData._id
+  const user = await req.userData._id;
   try {
-    const hotel = await Hotel.find()
-    const hotels = []
+    const hotel = await Hotel.find();
+    const hotels = [];
     hotel.map(hot => {
-      if(hot.author == user){
-        hotels.push(hot)
+      if (hot.author == user) {
+        hotels.push(hot);
       }
-    })
-    if(hotels.length >= 1){
-      res.json({hotels})
-    }else {
+    });
+    if (hotels.length >= 1) {
+      res.json({ hotels });
+    } else {
       return res.status(httpStatus.BAD_REQUEST).json({
         status: "error",
         message: "user is yet to upload a Hotel"
       });
     }
-  }catch (err) {
+  } catch (err) {
     console.log(err);
     return res.status(httpStatus.INTERNAL_SERVER_ERROR).json({
       status: "error",
       message: "something  went wrong"
     });
   }
-}
+};
