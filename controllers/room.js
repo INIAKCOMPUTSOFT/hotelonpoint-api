@@ -173,6 +173,7 @@ exports.getAroom = async (req, res) => {
   try {
     const _id = req.params.id;
     const hotel = await Room.findOne({ _id });
+    console.log(hotel);
     if (hotel) {
       return res.status(OK).json({
         status: "succes",
