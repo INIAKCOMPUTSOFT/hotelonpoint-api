@@ -37,7 +37,7 @@ const blogSchema = Schema({
     },
     author: {
         type: Schema.Types.ObjectId,
-        ref: 'User'
+        ref: 'Admin'
     }
 })
 

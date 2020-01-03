@@ -59,7 +59,6 @@ exports.blogPost = async (req, res) => {
 
 exports.getBlogs = (req, res) => {
   Blog.find()
-    .populate("user")
     .then(post => {
       if (post) {
         return res.status(httpStatus.OK).json({
@@ -78,7 +77,6 @@ exports.getBlogs = (req, res) => {
 exports.getBlog = (req, res) => {
   const _id = req.params.id;
   Blog.findOne({ _id })
-    .populate("author")
     .populate("comments.commentUser")
     .then(post => {
       if (post) {
@@ -134,7 +132,6 @@ exports.updateStory = async (req, res) => {
   const file = req.files.image;
   const md5 = file.md5;
   await Blog.findOne({ _id })
-    .populate("user")
     .then(story => {
       if (story.md5 === md5) {
         res.status(httpStatus.OK).json({

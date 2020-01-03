@@ -125,29 +125,6 @@ exports.login = async (req, res) => {
   }
 };
 
-exports.getAllUser = async (req, res) => {
-  try {
-    const users = await User.find().select('-password -__v')
-    if (users) {
-      return res.status(httpStatus.OK).json({
-        status: "succes",
-        usersCount: users.length,
-        data: users
-      });
-    } else {
-      return res.status(httpStatus.BAD_REQUEST).json({
-        message: "no user Found"
-      });
-    }
-  } catch (error) {
-    return res.status(httpStatus.INTERNAL_SERVER_ERROR).json({
-      status: "error",
-      message: "something  went wrong"
-    });
-  }
-
-}
-
 exports.getAuser = async(req, res) => {
   try {
     const _id = req.params.id;

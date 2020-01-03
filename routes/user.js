@@ -28,10 +28,9 @@ const multer = require('multer')
 // })
 const upload = multer({dest: 'uploads/'})
 
-router.get('/', userController.getAllUser);
 router.get('/me', authGaurd, userController.getAuthUser)
 router.post('/', userController.userSignUp);
-router.post('/login', userController.login);
+router.post('/logins', userController.login);
 router.get('/:id', userController.getAuser);
 router.put('/image/:id', upload.single('profileImage'), userController.updateProfilePic);
 router.put('/:id', authGaurd, userController.updateDetails);
