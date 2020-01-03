@@ -11,7 +11,7 @@ router.post(
   authGaurd,
   roomsController.AddNewRoom
 );
-router.get("/:id", roomsController.getAroom);
+router.get("/:id/room", roomsController.getAroom);
 router.delete("/:id", authGaurd, roomsController.deleteRoom);
 router.put("/:id", authGaurd, roomsController.updateRoom);
 
