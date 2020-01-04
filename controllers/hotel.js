@@ -1,6 +1,7 @@
 const mongoose = require("mongoose");
 const httpStatus = require("http-status-codes");
 const { Hotel } = require("../models/hotel");
+const {Room} = require("../models/room")
 const fs = require("fs");
 const cloudinary = require("../cloudinary");
 
@@ -271,10 +272,16 @@ exports.getAhotel = async (req, res) => {
       "author",
       "fullName imageUrl email -_id"
     );
+    const room  = await Room.find({hotelId : _id})
+    console.log(room)
     if (hotel) {
       return res.status(httpStatus.OK).json({
         status: "succes",
-        data: hotel
+        data: {
+          hotel,
+          roomCount: room.length,
+          room
+        }
       });
     }
     return res.status(httpStatus.BAD_REQUEST).json({
