@@ -62,7 +62,10 @@ exports.addHotel = (req, res) => {
     freeBooking,
     paidBooking,
     otherPaymentMethod,
-    moreHotelAmenities
+    moreHotelAmenities,
+    registerName,
+    registerPhone,
+    registerAddress
   } = req.body;
 
   Hotel.find({ "property.hotelName": hotelName })
@@ -152,6 +155,9 @@ exports.addHotel = (req, res) => {
             recipientZipCode,
             confirmAgreement
           },
+          registerName,
+          registerPhone,
+          registerAddress,
           approved: false
         });
         if (!Array.isArray(moreHotelPolicies)) {
@@ -159,20 +165,6 @@ exports.addHotel = (req, res) => {
         } else {
           moreHotelPolicies.forEach(concat => {
             prop.hotelPolicy.moreHotelPolicies.push(concat);
-          });
-        }
-
-        //algo to convert to usable arr
-        const roomss = [];
-        console.log("get it", rooms);
-        rooms.forEach(room => {
-          roomss.push(JSON.parse(room));
-        });
-        if (!Array.isArray(roomss)) {
-          prop.rooms.push(roomss);
-        } else {
-          roomss.forEach(concat => {
-            prop.rooms.push(concat);
           });
         }
         prop

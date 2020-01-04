@@ -153,16 +153,12 @@ const termsAndConditionsSchema = {
   recipientState: String,
   recipientCity: String,
   recipientZipCode: String,
-  confirmAgreement: String,
-}
+  confirmAgreement: String
+};
 
 const hotelSchema = new Schema({
   _id: mongoose.Schema.Types.ObjectId,
   imagerUrl: {
-    type: Array,
-    required: true
-  },
-  rooms: {
     type: Array,
     required: true
   },
@@ -178,14 +174,17 @@ const hotelSchema = new Schema({
   },
   author: {
     type: Schema.Types.ObjectId,
-    ref: 'User'
-},
+    ref: "User"
+  },
   approved: {
     type: Boolean,
     required: true
   },
   termsAndConditions: termsAndConditionsSchema,
-  vrTour: String
+  vrTour: String,
+  registerName: String,
+  registerPhone: String,
+  registerAddress: String
 });
 
 const Hotel = mongoose.model("Hotel", hotelSchema);
