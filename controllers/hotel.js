@@ -63,7 +63,10 @@ exports.addHotel = (req, res) => {
     freeBooking,
     paidBooking,
     otherPaymentMethod,
-    moreHotelAmenities
+    moreHotelAmenities,
+    registerName,
+    registerPhone,
+    registerAddress
   } = req.body;
 
   Hotel.find({ "property.hotelName": hotelName })
@@ -153,6 +156,9 @@ exports.addHotel = (req, res) => {
             recipientZipCode,
             confirmAgreement
           },
+          registerName,
+          registerPhone,
+          registerAddress,
           approved: false
         });
         if (!Array.isArray(moreHotelPolicies)) {

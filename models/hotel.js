@@ -185,7 +185,10 @@ const hotelSchema = new Schema({
     required: true
   },
   termsAndConditions: termsAndConditionsSchema,
-  vrTour: String
+  vrTour: String,
+  registerName: String,
+  registerPhone: String,
+  registerAddress: String
 });
 
 const Hotel = mongoose.model("Hotel", hotelSchema);
