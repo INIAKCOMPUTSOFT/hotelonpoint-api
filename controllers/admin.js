@@ -153,39 +153,39 @@ exports.deleteUser = (req, res) => {
 exports.getAllHotel = async (req, res) => {
   try {
     const hotel = await Hotel.find().exec();
-    if(hotel){
+    if (hotel) {
       res.status(OK).json({
         data: hotel,
         hotelCount: hotel.length,
         status: "success"
-      })
+      });
     }
-  }catch (err){
+  } catch (err) {
     res.status(INTERNAL_SERVER_ERROR).json({
       message: err,
       status: "error"
-    })
+    });
   }
 };
 
 exports.getAHotel = async (req, res) => {
-  const _id = req.params.id
+  const _id = req.params.id;
   try {
     const hotel = await Hotel.findOne({ _id }).exec();
-    if(hotel){
-      const rooms = await Room.find({hotelId: hotel._id})
+    if (hotel) {
+      const rooms = await Room.find({ hotelId: hotel._id });
       res.status(OK).json({
         Hotel: hotel,
         Room: rooms,
         RoomCount: rooms.length,
         status: "success"
-      })
+      });
     }
-  }catch (err){
+  } catch (err) {
     res.status(INTERNAL_SERVER_ERROR).json({
       message: err,
       status: "error"
-    })
+    });
   }
 };
 
@@ -211,60 +211,102 @@ exports.deleteHotel = (req, res) => {
 
 exports.ApproveHotel = (req, res) => {
   const _id = req.params.id;
-  Hotel.findOne({_id}).then(resp => {
-    if(resp.approved){
-      res.status(BAD_REQUEST).json({message: "Hotel Has already Been approved", status: "error"})
-    }
-    Hotel.updateOne({ _id }, {approved: req.body.approved})
-    .then(result => {
-      res.status(OK).json({message: "Hotel approved successfully", status: "success"})
+  Hotel.findOne({ _id })
+    .then(resp => {
+      if (resp.approved) {
+        res.status(BAD_REQUEST).json({
+          message: "Hotel Has already Been approved",
+          status: "error"
+        });
+      }
+      Hotel.updateOne({ _id }, { approved: req.body.approved }).then(result => {
+        res
+          .status(OK)
+          .json({ message: "Hotel approved successfully", status: "success" });
+      });
     })
-  })
     .catch(err => {
       console.log(err);
       res.status(INTERNAL_SERVER_ERROR).json({
         error: err
       });
     });
-}
+};
 
 exports.suspendHotel = (req, res) => {
   const _id = req.params.id;
-  Hotel.findOne({_id}).then(resp => {
-    if(!resp.approved){
-      res.status(BAD_REQUEST).json({message: "Hotel Has already Been Suspended", status: "error"})
-    }
-    if(req.body.approved == true || req.body.approved === true){
-      res.status(BAD_REQUEST).json({message: "To suspend Hotel approve must be false", status: "error"})
-    }
-    Hotel.updateOne({ _id }, {approved: req.body.approved})
-    .then(result => {
-      res.status(OK).json({message: "Hotel suspended successfully", status: "success"})
+  Hotel.findOne({ _id })
+    .then(resp => {
+      if (!resp.approved) {
+        res.status(BAD_REQUEST).json({
+          message: "Hotel Has already Been Suspended",
+          status: "error"
+        });
+      }
+      if (req.body.approved == true || req.body.approved === true) {
+        res.status(BAD_REQUEST).json({
+          message: "To suspend Hotel approve must be false",
+          status: "error"
+        });
+      }
+      Hotel.updateOne({ _id }, { approved: req.body.approved }).then(result => {
+        res
+          .status(OK)
+          .json({ message: "Hotel suspended successfully", status: "success" });
+      });
     })
-  })
     .catch(err => {
       console.log(err);
       res.status(INTERNAL_SERVER_ERROR).json({
         error: err
       });
     });
-}
+};
 
 exports.addvrtour = (req, res) => {
   const _id = req.params.id;
-  Hotel.findOne({_id}).then(resp => {
-    if(!resp.approved){
-      res.status(BAD_REQUEST).json({message: "Hotel must Approved to add VR Tour", status: "error"})
-    }
-    Hotel.updateOne({ _id }, {vrTour: req.body.vrtour})
-    .then(result => {
-      res.status(OK).json({message: "Tour added successfully", status: "success"})
+  Hotel.findOne({ _id })
+    .then(resp => {
+      if (!resp.approved) {
+        res.status(BAD_REQUEST).json({
+          message: "Hotel must Approved to add VR Tour",
+          status: "error"
+        });
+      }
+      Hotel.updateOne({ _id }, { vrTour: req.body.vrtour }).then(result => {
+        res
+          .status(OK)
+          .json({ message: "Tour added successfully", status: "success" });
+      });
     })
-  })
     .catch(err => {
       console.log(err);
       res.status(INTERNAL_SERVER_ERROR).json({
         error: err
       });
     });
-}
+};
+
+exports.getAuthUser = async (req, res) => {
+  const _id = await req.userData._id;
+  try {
+    const user = await Admin.findOne({ _id });
+    if (user) {
+      req.user = user;
+      const cred = {
+        _id: user._id,
+        email: user.email,
+        isAdmin: user.isAdmin
+      };
+      res.status(200).json({
+        message: "User Fetch successful",
+        userData: cred
+      });
+    } else {
+      res.status(404).json({ error: "Unauthorized" });
+    }
+  } catch (err) {
+    console.log(err);
+    res.status(500).json({ error: err });
+  }
+};

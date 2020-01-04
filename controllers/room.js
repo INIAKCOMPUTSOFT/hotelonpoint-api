@@ -153,7 +153,6 @@ exports.updateRoom = async (req, res) => {
     updateOps[Ops.propName] = Ops.value;
   }
   await Room.findOne({ _id }).then(async room => {
-    console.log("324", req.userData._id == room.author);
     if (req.userData._id == room.author) {
       await Room.update({ _id }, { $set: updateOps })
         .then(room => {
@@ -196,7 +195,6 @@ exports.deleteRoom = (req, res) => {
   const _id = req.params.id;
   Room.deleteOne({ _id })
     .then(result => {
-      console.log(result);
       res
         .status(OK)
         .json({ message: "Room Deleted Successfully", data: "success" });
