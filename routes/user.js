@@ -33,6 +33,8 @@ router.post('/', userController.userSignUp);
 router.post('/logins', userController.login);
 router.get('/:id', userController.getAuser);
 router.put('/image/:id', upload.single('profileImage'), userController.updateProfilePic);
+router.post('/validateUser', userController.checkValidUser)
+router.put('/changePassword/:id', userController.changePassword)
 router.put('/:id', authGaurd, userController.updateDetails);
 
 module.exports = router;
