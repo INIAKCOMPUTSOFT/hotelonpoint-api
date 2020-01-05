@@ -239,8 +239,8 @@ exports.getCredUserhotel = async (req, res) => {
       "author",
       "fullName imageUrl email -_id"
     );
-    const approved = [];
-    const unApproved = [];
+    const approved = []
+    const unApproved = []
     hotel.forEach(res => {
       if (res.author.email === req.userData.email) {
         if (res.approved) {
