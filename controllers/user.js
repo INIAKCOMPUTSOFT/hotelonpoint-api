@@ -102,7 +102,7 @@ exports.userSignUp = async (req, res) => {
       });
 
       let mailOptions = {
-        from: '"Hotel on Point" <support@hotelonpoint>', // sender address
+        from: '"HotelonPoints.com" <support@hotelonpoint>', // sender address
         to: email, // list of receivers
         subject: "Welcome to Hotel on Points", // Subject line
         text: "Hello world?", // plain text body
