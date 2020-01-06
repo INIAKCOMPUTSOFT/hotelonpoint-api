@@ -6,6 +6,7 @@ const authGaurd = require("../util/authGaurd");
 const paystack = require('paystack')(process.env.PAYSTACK);
 
 router.post("/", authGaurd,  upload.array("image"), hotelController.addHotel);
+router.put("/uploadhotelphoto/:id",  upload.array("image"), hotelController.uploadhotelphoto);
 router.get("/", hotelController.getHotels);
 router.get('/me', authGaurd, hotelController.getCredUserhotel)
 router.get('/myHotel', authGaurd, hotelController.getAuthUserHotel)

@@ -15,7 +15,7 @@ cloudinary.config({
 });
 
 const defaultImg =
-  "http://res.cloudinary.com/sapeled3/image/upload/v1575835409/bhaulju2fh4mn5y8yqa4.png";
+  "https://res.cloudinary.com/sapeled3/image/upload/v1575835409/bhaulju2fh4mn5y8yqa4.png";
 
 const welcomeMessage = `<div style="font-family: Arial, Helvetica, sans-serif; line-height: 1.6rem;">
 <section>

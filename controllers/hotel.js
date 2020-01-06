@@ -328,3 +328,50 @@ exports.getAuthUserHotel = async (req, res) => {
     });
   }
 };
+
+exports.uploadhotelphoto = (req, res) => {
+  const _id = req.params.id
+  Hotel.findOne({ _id })
+    .then(async prop => {
+      if (!prop) {
+        return res.status(httpStatus.BAD_REQUEST).json({
+          status: "error",
+          message: "Property doesnt exists"
+        });
+      }
+      const uploader = async path => await cloudinary.uploads(path, "Images");
+      if (req.method === "PUT") {
+        const urls = [];
+        const files = req.files;
+
+        for (const file of files) {
+          const { path } = file;
+          const newPath = await uploader(path);
+
+          urls.push(newPath);
+          fs.unlinkSync(path);
+        }
+
+        Hotel.updateOne({_id}, {imagerUrl : urls}).then(resul => {
+          console.log(resul)
+          return res.status({
+            message: "image uploaded successfully"
+          })
+        })
+          .catch(err => {
+            console.log(err);
+            res.status(httpStatus.BAD_REQUEST).json({
+              error: "Incorrect Details. Fill Form with Correct Details"
+            });
+          });
+      } else {
+        res.status(405).json({
+          err: "images not uploaded successfully"
+        });
+      }
+    })
+    .catch(err => {
+      console.log(err);
+      res.status(httpStatus.INTERNAL_SERVER_ERROR).json({ error: err });
+    });
+};
