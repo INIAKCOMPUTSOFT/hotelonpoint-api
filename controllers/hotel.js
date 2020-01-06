@@ -1,7 +1,7 @@
 const mongoose = require("mongoose");
 const httpStatus = require("http-status-codes");
 const { Hotel } = require("../models/hotel");
-const {Room} = require("../models/room")
+const { Room } = require("../models/room");
 const fs = require("fs");
 const cloudinary = require("../cloudinary");
 
@@ -159,6 +159,7 @@ exports.addHotel = (req, res) => {
           registerName,
           registerPhone,
           registerAddress,
+          percentageValue: 10,
           approved: false
         });
         if (!Array.isArray(moreHotelPolicies)) {
@@ -225,8 +226,8 @@ exports.getCredUserhotel = async (req, res) => {
       "author",
       "fullName imageUrl email -_id"
     );
-    const approved = []
-    const unApproved = []
+    const approved = [];
+    const unApproved = [];
     hotel.forEach(res => {
       if (res.author.email === req.userData.email) {
         if (res.approved) {
@@ -264,8 +265,8 @@ exports.getAhotel = async (req, res) => {
       "author",
       "fullName imageUrl email -_id"
     );
-    const room  = await Room.find({hotelId : _id})
-    console.log(room)
+    const room = await Room.find({ hotelId: _id });
+    console.log(room);
     if (hotel) {
       return res.status(httpStatus.OK).json({
         status: "succes",
@@ -316,7 +317,7 @@ exports.getAuthUserHotel = async (req, res) => {
 };
 
 exports.uploadhotelphoto = (req, res) => {
-  const _id = req.params.id
+  const _id = req.params.id;
   Hotel.findOne({ _id })
     .then(async prop => {
       if (!prop) {
@@ -338,12 +339,13 @@ exports.uploadhotelphoto = (req, res) => {
           fs.unlinkSync(path);
         }
 
-        Hotel.updateOne({_id}, {imagerUrl : urls}).then(resul => {
-          console.log(resul)
-          return res.status({
-            message: "image uploaded successfully"
+        Hotel.updateOne({ _id }, { imagerUrl: urls })
+          .then(resul => {
+            console.log(resul);
+            return res.status({
+              message: "image uploaded successfully"
+            });
           })
-        })
           .catch(err => {
             console.log(err);
             res.status(httpStatus.BAD_REQUEST).json({
@@ -359,5 +361,33 @@ exports.uploadhotelphoto = (req, res) => {
     .catch(err => {
       console.log(err);
       res.status(httpStatus.INTERNAL_SERVER_ERROR).json({ error: err });
+    });
+};
+
+exports.increasePercentage = (req, res) => {
+  const _id = req.params.id;
+  Hotel.findOne({ _id })
+    .then(resp => {
+      if (!resp) {
+        res.status(httpStatus.BAD_REQUEST).json({
+          message: "Hotel Does not exist",
+          status: "error"
+        });
+      }
+      Hotel.updateOne(
+        { _id },
+        { percentageValue: req.body.percentageValue }
+      ).then(result => {
+        res.status(httpStatus.OK).json({
+          message: "Percentage increased successfully successfully",
+          status: "success"
+        });
+      });
+    })
+    .catch(err => {
+      console.log(err);
+      res.status(httpStatus.INTERNAL_SERVER_ERROR).json({
+        error: err
+      });
     });
 };

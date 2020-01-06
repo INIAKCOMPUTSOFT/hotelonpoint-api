@@ -184,7 +184,8 @@ const hotelSchema = new Schema({
   vrTour: String,
   registerName: String,
   registerPhone: String,
-  registerAddress: String
+  registerAddress: String,
+  percentageValue: Number
 });
 
 const Hotel = mongoose.model("Hotel", hotelSchema);
