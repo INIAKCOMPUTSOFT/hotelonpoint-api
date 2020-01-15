@@ -16,6 +16,7 @@ router.get("/", hotelController.getHotels);
 router.get("/me", authGaurd, hotelController.getCredUserhotel);
 router.get("/myHotel", authGaurd, hotelController.getAuthUserHotel);
 router.get("/:id", hotelController.getAhotel);
+router.put("/:id", authGaurd, hotelController.updateHotel)
 router.post("/verify", function(req, res) {
   paystack.transaction.verify(req.body.ref, function(error, body) {
     if (error) {

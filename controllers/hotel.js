@@ -195,6 +195,28 @@ exports.addHotel = (req, res) => {
     });
 };
 
+exports.updateHotel = async (req, res) => {
+  const _id = req.params.id;
+  const updateOps = {};
+  for (const Ops of req.body) {
+    updateOps[Ops.propName] = Ops.value;
+  }
+  await Hotel.findOne({ _id }).then(async room => {
+    if (req.userData._id == room.author) {
+      await Room.update({ _id }, { $set: updateOps })
+        .then(room => {
+          res.status(200).json(room);
+        })
+        .catch(err => {
+          console.log(err);
+          res.status(500).json({ error: err });
+        });
+    } else {
+      res.status(401).json({ message: "unAuthorized access" });
+    }
+  });
+};
+
 exports.getHotels = async (req, res) => {
   try {
     const hotel = await Hotel.find().populate(
