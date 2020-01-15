@@ -345,7 +345,7 @@ exports.checkValidUser = async (req, res) => {
         html: `
           <h1>HotelOnPoints.coms</h1> <br />
           <p>Reset your Password with this Link</p> <br />
-          <a href='http://localhost:3000/passverification/${user._id}'>Reset Password</a>
+          <a href='https://hotelonpoints.com/passverification/${user._id}'>Reset Password</a>
           `
         // html body
       };
@@ -409,9 +409,9 @@ exports.changePassword = async (req, res) => {
           subject: "Passsword Reset Successful", // Subject line
           text: "Hello world?", // plain text body
           html: `
-          <h1>HotelOnPoints.coms</h1> <br />
+          <h1>HotelOnPoints.com</h1> <br />
           <p>Password Reset was successful</p>
-          <a href='http://localhost:3000/login'>Login</a> <br />
+          <a href='https://hotelonpoints.com/login'>Login</a> <br />
           <p>To access all our awesome services</p>
           `
           // html body
