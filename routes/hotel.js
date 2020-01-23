@@ -12,14 +12,15 @@ router.put(
   '/uploadhotelphoto/:id',
   upload.array('image'),
   hotelController.uploadhotelphoto
-)
-router.put('/percentage/:id', authGaurd, hotelController.increasePercentage)
-router.get('/', hotelController.getHotels)
-router.get('/me', authGaurd, hotelController.getCredUserhotel)
-router.get('/myHotel', authGaurd, hotelController.getAuthUserHotel)
-router.get('/:id', hotelController.getAhotel)
-router.post('/verify', authGaurd, function (req, res) {
-  paystack.transaction.verify(req.body.ref, function (error, body) {
+);
+router.put("/percentage/:id", authGaurd, hotelController.increasePercentage);
+router.get("/", hotelController.getHotels);
+router.get("/me", authGaurd, hotelController.getCredUserhotel);
+router.get("/myHotel", authGaurd, hotelController.getAuthUserHotel);
+router.get("/:id", hotelController.getAhotel);
+router.put("/:id", authGaurd, hotelController.updateHotel)
+router.post("/verify", function(req, res) {
+  paystack.transaction.verify(req.body.ref, function(error, body) {
     if (error) {
       res.json(error)
     } else {
