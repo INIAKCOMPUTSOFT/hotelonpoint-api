@@ -29,6 +29,7 @@ const roomRouter = require('./routes/room')
 const adminRouter = require('./routes/admin')
 const bookingRouter = require('./routes/booking')
 const reviewRouter = require('./routes/review')
+const contactRouter = require('./routes/contact')
 
 app.get("/", (req, res) => res.send("Welcome to HotelOnPoint-API"));
 app.use("/user", userRouter);
@@ -38,6 +39,7 @@ app.use('/room', roomRouter);
 app.use('/admin', adminRouter)
 app.use('/booking', bookingRouter)
 app.use('/review', reviewRouter)
+app.use('/contactus', contactRouter)
 
 const port = process.env.PORT || 3400;
 app.listen(port, () => console.log(`app listening on port ${port}`));

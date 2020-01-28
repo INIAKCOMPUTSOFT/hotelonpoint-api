@@ -2,6 +2,7 @@ const express = require('express')
 const router = express.Router()
 const hotelController = require('../controllers/hotel')
 const upload = require('../multer')
+const { Room } = require('../models/room')
 const authGaurd = require('../util/authGaurd')
 const paystack = require('paystack')(process.env.PAYSTACK)
 const mongoose = require('mongoose')
@@ -20,16 +21,18 @@ router.get("/myHotel", authGaurd, hotelController.getAuthUserHotel);
 router.get("/:id", hotelController.getAhotel);
 router.put("/:id", authGaurd, hotelController.updateHotel)
 router.post("/verify", function(req, res) {
-  paystack.transaction.verify(req.body.ref, function(error, body) {
+  paystack.transaction.verify(req.body.ref, async function(error, body) {
     if (error) {
       res.json(error)
     } else {
+      const room = await Room.findOne({ _id : bookings.Room })
       Booking.findOne({ referenceNumber: body.data.reference })
         .then(result => {
           if (!result) {
             const book = {
               _id: new mongoose.Types.ObjectId(),
               Room: req.body.BookingInfo.roomId,
+              hotelId: room.hotelId,
               roomType: req.body.BookingInfo.roomType,
               author: req.userData._id,
               referenceNumber: body.data.reference,

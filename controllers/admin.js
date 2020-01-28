@@ -70,6 +70,106 @@ exports.createAdmin = (req, res) => {
     });
 };
 
+exports.createCC = (req, res) => {
+  const { email, password, isCC, confirmPassword } = req.body;
+  if (password !== confirmPassword)
+    return res
+      .status(PRECONDITION_FAILED)
+      .json({ message: "password must match" });
+  Admin.find({ email })
+    .exec()
+    .then(admin => {
+      if (admin.length >= 1) {
+        res.status(BAD_REQUEST).json({
+          message: "customer Care Already exists",
+          status: "error"
+        });
+      } else {
+        bcrypt.hash(password, 10, (err, hash) => {
+          if (err) {
+            console.log(err);
+            return res.status(500).json({
+              error: err
+            });
+          } else {
+            const newAdmin = new Admin({
+              _id: new mongoose.Types.ObjectId(),
+              email,
+              password: hash,
+              isAdmin : false,
+              isCC
+            });
+            newAdmin.save().then(resp => {
+              const token = jwt.sign(
+                {
+                  email: resp.email,
+                  _id: resp._id,
+                  isAdmin: resp.isCC
+                },
+                process.env.JWT_KEY,
+                {
+                  expiresIn: "2h"
+                }
+              );
+              res.status(OK).json({
+                data: token,
+                status: "success"
+              });
+            });
+          }
+        });
+      }
+    })
+    .catch(err => {
+      console.log(err);
+      res.status(INTERNAL_SERVER_ERROR).json({
+        message: "Something went wrong Creating Admin user",
+        data: "error"
+      });
+    });
+};
+
+exports.ccLogin = (req, res) => {
+  const { email, password } = req.body;
+  Admin.findOne({ email })
+    .exec()
+    .then(admin => {
+      if (!admin) {
+        res.status(BAD_REQUEST).json({
+          message: "No user Found Please Register",
+          status: "error"
+        });
+      }
+
+      bcrypt.compare(password, admin.password).then(isAdmin => {
+        if (isAdmin) {
+          const token = jwt.sign(
+            {
+              email: admin.email,
+              _id: admin._id,
+              isCC: admin.isCC
+            },
+            process.env.JWT_KEY,
+            {
+              expiresIn: "2h"
+            }
+          );
+          res.status(OK).json({
+            data: token,
+            status: "success"
+          });
+        }
+      });
+    })
+    .catch(err => {
+      console.log(err);
+      res.status(INTERNAL_SERVER_ERROR).json({
+        message: "Something went wrong Creating custommer care user",
+        data: "error"
+      });
+    });
+};
+
 exports.adminLogin = (req, res) => {
   const { email, password } = req.body;
   Admin.findOne({ email })

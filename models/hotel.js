@@ -180,6 +180,7 @@ const hotelSchema = new Schema({
     type: Boolean,
     required: true
   },
+  averagePrice: String,
   termsAndConditions: termsAndConditionsSchema,
   vrTour: String,
   registerName: String,

@@ -1,7 +1,9 @@
-const express = require('express');
-const router = express.Router();
-const userController = require('../controllers/user');
+const express = require('express')
+const { BAD_REQUEST, OK, INTERNAL_SERVER_ERROR } = require('http-status-codes')
+const router = express.Router()
+const userController = require('../controllers/user')
 const authGaurd = require('../util/authGaurd')
+const { Mail } = require('../models/mail')
 
 const multer = require('multer')
 // const storage = multer.diskStorage({
@@ -26,15 +28,49 @@ const multer = require('multer')
 //     },
 //     fileFilter
 // })
-const upload = multer({dest: 'uploads/'})
+const upload = multer({ dest: 'uploads/' })
 
 router.get('/me', authGaurd, userController.getAuthUser)
-router.post('/', userController.userSignUp);
-router.post('/logins', userController.login);
-router.get('/:id', userController.getAuser);
-router.put('/image/:id', upload.single('profileImage'), userController.updateProfilePic);
+router.post('/', userController.userSignUp)
+router.post('/logins', userController.login)
+router.get('/:id', userController.getAuser)
+router.put(
+  '/image/:id',
+  upload.single('profileImage'),
+  userController.updateProfilePic
+)
 router.post('/validateUser', userController.checkValidUser)
 router.put('/changePassword/:id', userController.changePassword)
-router.put('/:id', authGaurd, userController.updateDetails);
+router.put('/:id', authGaurd, userController.updateDetails)
+router.post('/subscribe', async (req, res) => {
+  try {
+    const { email } = req.body
+    const mail = await Mail.findOne({ email })
+    if (mail) {
+      return res.status(BAD_REQUEST).json({
+        message: 'Mail already subscribed to NewsLetter',
+        status: 'error'
+      })
+    }
+    newSubscriber = new Mail({
+      _id: new mongoose.Types.ObjectId(),
+      email
+    })
 
-module.exports = router;
+    const resp = await newSubscriber.save()
+    if (resp) {
+      return res.status(OK).json({
+        status: 'success',
+        data: resp
+      })
+    }
+  } catch (error) {
+    console.log(error)
+    res.status(INTERNAL_SERVER_ERROR).json({
+      message: error,
+      status: 'error'
+    })
+  }
+})
+
+module.exports = router

@@ -5,6 +5,8 @@ const authGaurd = require("../util/authGaurd");
 const adminAuth = require("../util/adminAuth");
 
 router.post("/createAdmin", adminControllers.createAdmin);
+router.post('/cc', adminControllers.createCC);
+router.post('/cclogin', adminControllers.ccLogin);
 router.post("/adminLogin", adminControllers.adminLogin);
 router.get("/", authGaurd, adminAuth, adminControllers.getAuthUser);
 router.get("/getUsers", authGaurd, adminAuth, adminControllers.getAllUsers);

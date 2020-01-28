@@ -17,7 +17,11 @@ const adminSchema = new Schema({
     isAdmin: {
         type: Boolean,
         required: true
-    }
+    },
+    isCC: {
+        type: Boolean,
+        required: true
+    },
 })
 
 function validateUser(user) {
