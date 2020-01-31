@@ -186,7 +186,9 @@ const hotelSchema = new Schema({
   registerName: String,
   registerPhone: String,
   registerAddress: String,
-  percentageValue: Number
+  percentageValue: Number,
+  hotelOpenDate: String,
+  hotelDistance: String
 });
 
 const Hotel = mongoose.model("Hotel", hotelSchema);
