@@ -15,6 +15,12 @@ router.get(
   ccAuth,
   bookController.getAllBookingInvoice
 );
+
+router.get(
+  "/userinvoice/:hotelId",
+  authGaurd,
+  bookController.getAllBookingInvoice
+);
 router.get("/:bookingId", authGaurd, bookController.getABooking);
 router.put("/:bookingId", authGaurd, ccAuth, bookController.updateBooking);
 router.delete("/:bookingId", authGaurd, ccAuth, bookController.deleteBooking);
