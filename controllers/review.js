@@ -1,5 +1,6 @@
 const mongoose = require("mongoose");
 const { Review } = require("../models/review");
+const { Comment } = require("../models/comments")
 const { Hotel } = require("../models/hotel");
 const { BAD_REQUEST, OK, INTERNAL_SERVER_ERROR } = require("http-status-codes");
 
