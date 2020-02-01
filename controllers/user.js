@@ -267,13 +267,13 @@ exports.updateProfilePic = (req, res) => {
 };
 
 exports.updateDetails = (req, res) => {
-  const _id = req.params.id;
+  const _id = req.userData._id;
   const updateOps = {};
 
   for (const Ops of req.body) {
     updateOps[Ops.propName] = Ops.value;
   }
-  User.updateMany(
+  User.updateOne(
     { _id },
     {
       $set: updateOps

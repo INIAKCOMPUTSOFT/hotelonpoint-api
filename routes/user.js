@@ -41,7 +41,7 @@ router.put(
 )
 router.post('/validateUser', userController.checkValidUser)
 router.put('/changePassword/:id', userController.changePassword)
-router.put('/:id', authGaurd, userController.updateDetails)
+router.put('/userUpdate', authGaurd, userController.updateDetails)
 router.post('/subscribe', async (req, res) => {
   try {
     const { email } = req.body
