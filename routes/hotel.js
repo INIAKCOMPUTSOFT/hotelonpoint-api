@@ -1,17 +1,18 @@
-const express = require('express')
-const router = express.Router()
-const hotelController = require('../controllers/hotel')
-const upload = require('../multer')
-const { Room } = require('../models/room')
-const authGaurd = require('../util/authGaurd')
-const paystack = require('paystack')(process.env.PAYSTACK)
-const mongoose = require('mongoose')
-const { Booking } = require('../models/booking')
+const express = require("express");
+const router = express.Router();
+const hotelController = require("../controllers/hotel");
+const upload = require("../multer");
+const { Room } = require("../models/room");
+const { Hotel } = require("../models/hotel");
+const authGaurd = require("../util/authGaurd");
+const paystack = require("paystack")(process.env.PAYSTACK);
+const mongoose = require("mongoose");
+const { Booking } = require("../models/booking");
 
-router.post('/', authGaurd, upload.array('image'), hotelController.addHotel)
+router.post("/", authGaurd, upload.array("image"), hotelController.addHotel);
 router.put(
-  '/uploadhotelphoto/:id',
-  upload.array('image'),
+  "/uploadhotelphoto/:id",
+  upload.array("image"),
   hotelController.uploadhotelphoto
 );
 router.put("/percentage/:id", authGaurd, hotelController.increasePercentage);
@@ -19,13 +20,14 @@ router.get("/", hotelController.getHotels);
 router.get("/me", authGaurd, hotelController.getCredUserhotel);
 router.get("/myHotel", authGaurd, hotelController.getAuthUserHotel);
 router.get("/:id", hotelController.getAhotel);
-router.put("/:id", authGaurd, hotelController.updateHotel)
+router.put("/:id", authGaurd, hotelController.updateHotel);
 router.post("/verify", function(req, res) {
   paystack.transaction.verify(req.body.ref, async function(error, body) {
     if (error) {
-      res.json(error)
+      res.json(error);
     } else {
-      const room = await Room.findOne({ _id : bookings.Room })
+      const room = await Room.findOne({ _id: bookings.Room });
+      const hotel = await Hotel.findOne({ _id: room.hotelId });
       Booking.findOne({ referenceNumber: body.data.reference })
         .then(result => {
           if (!result) {
@@ -40,8 +42,8 @@ router.post("/verify", function(req, res) {
               cancellationStatus: false,
               checkInStatus: false,
               checkOutStatus: false,
-              // checkIn: req.body.checkIn,
-              // checkOut: req.body.checkOut,
+              checkIn: req.body.checkIn,
+              checkOut: req.body.checkOut,
               createdAt: body.data.created_at,
               paidAt: body.data.paid_at,
               channel: body.data.channel,
@@ -57,26 +59,27 @@ router.post("/verify", function(req, res) {
                 getDeals: req.body.BookingInfo.getdeals,
                 title: req.body.BookingInfo.title,
                 wantAirportShuttle: req.body.BookingInfo.wantairportshuttle
-              }
-            }
+              },
+              currentPercentage: hotel.percentageValue
+            };
 
-            result = new Booking(book)
+            result = new Booking(book);
             result.save().then(resp => {
               res.status(200).json({
-                message: 'Booking successful',
+                message: "Booking successful",
                 data: resp
-              })
-            })
+              });
+            });
           }
         })
         .catch(err => {
-          console.log(err)
+          console.log(err);
           res.status(httpStatus.BAD_REQUEST).json({
             error: "Incorrect Details. Fill Form with Correct Details"
           });
-        })
+        });
     }
-  })
-})
+  });
+});
 
-module.exports = router
+module.exports = router;

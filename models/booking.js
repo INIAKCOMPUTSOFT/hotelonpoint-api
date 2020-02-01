@@ -2,39 +2,39 @@ const mongoose = require("mongoose");
 const Schema = mongoose.Schema;
 
 const customerSchema = {
-    customerId: {
-        type: String,
-        required: true
-      },
-    firstName: {
-        type: String,
-        required: true
-      },
-      lastName: {
-        type: String,
-        required: true
-      },
-      email: {
-        type: String,
-        required: true
-      },
-      phone: {
-        type: String,
-        required: true
-      },
-      getDeals: {
-        type: Boolean,
-        required: true
-      },
-      title: {
-        type: String,
-        required: true
-      },
-      wantAirportShuttle: {
-        type: Boolean,
-        required: true
-      },
-}
+  customerId: {
+    type: String,
+    required: true
+  },
+  firstName: {
+    type: String,
+    required: true
+  },
+  lastName: {
+    type: String,
+    required: true
+  },
+  email: {
+    type: String,
+    required: true
+  },
+  phone: {
+    type: String,
+    required: true
+  },
+  getDeals: {
+    type: Boolean,
+    required: true
+  },
+  title: {
+    type: String,
+    required: true
+  },
+  wantAirportShuttle: {
+    type: Boolean,
+    required: true
+  }
+};
 
 const bookingSchema = new Schema({
   _id: mongoose.Schema.Types.ObjectId,
@@ -43,8 +43,8 @@ const bookingSchema = new Schema({
     ref: "Room"
   },
   roomType: {
-      type: String,
-      required: true
+    type: String,
+    required: true
   },
   author: {
     type: Schema.Types.ObjectId,
@@ -58,14 +58,14 @@ const bookingSchema = new Schema({
     type: Boolean,
     required: true
   },
-  // checkIn: {
-  //   type: String,
-  //   required: true
-  // },
-  // checkOut: {
-  //   type: String,
-  //   required: true
-  // },
+  checkIn: {
+    type: String,
+    required: true
+  },
+  checkOut: {
+    type: String,
+    required: true
+  },
   referenceNumber: {
     type: String,
     required: true
@@ -103,6 +103,6 @@ const bookingSchema = new Schema({
     required: true
   },
   customer: customerSchema
-})
+});
 const Booking = mongoose.model("Booking", bookingSchema);
 exports.Booking = Booking;
