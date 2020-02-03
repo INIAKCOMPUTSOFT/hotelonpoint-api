@@ -1,6 +1,6 @@
 const mongoose = require("mongoose");
 const { Review } = require("../models/review");
-const { Comment } = require("../models/comments")
+const { Comment } = require("../models/comments");
 const { Hotel } = require("../models/hotel");
 const { BAD_REQUEST, OK, INTERNAL_SERVER_ERROR } = require("http-status-codes");
 
@@ -123,4 +123,20 @@ exports.approveReviews = async (req, res) => {
       status: "error"
     });
   }
+};
+
+exports.deleteReview = (req, res) => {
+  const _id = req.params.reviewId;
+  Review.deleteOne({ _id })
+    .then(result => {
+      res
+        .status(OK)
+        .json({ message: "review Deleted Successfully", data: "success" });
+    })
+    .catch(err => {
+      console.log(err);
+      res.status(INTERNAL_SERVER_ERROR).json({
+        error: err
+      });
+    });
 };

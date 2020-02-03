@@ -3,12 +3,14 @@ const router = express.Router();
 const adminControllers = require("../controllers/admin");
 const authGaurd = require("../util/authGaurd");
 const adminAuth = require("../util/adminAuth");
+const ccAuth = require("../util/ccAuth");
 
 router.post("/createAdmin", adminControllers.createAdmin);
-router.post('/cc', adminControllers.createCC);
-router.post('/cclogin', adminControllers.ccLogin);
+router.post("/cc", adminControllers.createCC);
+router.post("/cclogin", adminControllers.ccLogin);
 router.post("/adminLogin", adminControllers.adminLogin);
 router.get("/", authGaurd, adminAuth, adminControllers.getAuthUser);
+router.get("/ccAuth", authGaurd, ccAuth, adminControllers.getAuthCCUser);
 router.get("/getUsers", authGaurd, adminAuth, adminControllers.getAllUsers);
 router.delete(
   "/deleteUser/:id",
