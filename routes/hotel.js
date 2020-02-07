@@ -23,10 +23,15 @@ router.get("/:id", hotelController.getAhotel);
 router.put("/:id", authGaurd, hotelController.updateHotel);
 router.post("/verify", function(req, res) {
   paystack.transaction.verify(req.body.ref, async function(error, body) {
+    if(body === null) {
+      res.status(500).json({
+        message: "failed paystack gateway",
+      });
+    }
     if (error) {
       res.json(error);
     } else {
-      const room = await Room.findOne({ _id: bookings.Room });
+      const room = await Room.findOne({ _id: req.body.BookingInfo.roomId });
       const hotel = await Hotel.findOne({ _id: room.hotelId });
       Booking.findOne({ referenceNumber: body.data.reference })
         .then(result => {
@@ -36,14 +41,14 @@ router.post("/verify", function(req, res) {
               Room: req.body.BookingInfo.roomId,
               hotelId: room.hotelId,
               roomType: req.body.BookingInfo.roomType,
-              author: req.userData._id,
+              author: req.body.userId,
               referenceNumber: body.data.reference,
               amount: body.data.amount,
               cancellationStatus: false,
               checkInStatus: false,
               checkOutStatus: false,
-              checkIn: req.body.checkIn,
-              checkOut: req.body.checkOut,
+              checkIn: req.body.BookingInfo.checkin,
+              checkOut: req.body.BookingInfo.checkout,
               createdAt: body.data.created_at,
               paidAt: body.data.paid_at,
               channel: body.data.channel,
@@ -62,7 +67,6 @@ router.post("/verify", function(req, res) {
               },
               currentPercentage: hotel.percentageValue
             };
-
             result = new Booking(book);
             result.save().then(resp => {
               res.status(200).json({
