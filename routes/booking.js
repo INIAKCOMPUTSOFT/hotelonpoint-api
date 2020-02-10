@@ -8,6 +8,7 @@ router.get("/", (req, res) => {
   res.send("Booking");
 });
 router.get("/all", authGaurd, ccAuth, bookController.getAllBookings);
+router.get("/hotelbooking/:hotelId", bookController.getAllHotelBookings);
 router.get("/userAll", authGaurd, bookController.getAllUserBookings);
 router.get(
   "/invoice/:hotelId",

@@ -19,6 +19,7 @@ router.delete(
   adminControllers.deleteUser
 );
 router.get("/getAllHotels", authGaurd, adminAuth, adminControllers.getAllHotel);
+router.get("/ccgetAllHotels", authGaurd, ccAuth, adminControllers.getAllHotel);
 router.get("/:id", authGaurd, adminAuth, adminControllers.getAHotel);
 router.delete(
   "/deleteHotel/:id",

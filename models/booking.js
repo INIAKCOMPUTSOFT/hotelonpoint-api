@@ -42,6 +42,10 @@ const bookingSchema = new Schema({
     type: Schema.Types.ObjectId,
     ref: "Room"
   },
+  hotelId: {
+    type: Schema.Types.ObjectId,
+    ref: "Hotel"
+  },
   roomType: {
     type: String,
     required: true

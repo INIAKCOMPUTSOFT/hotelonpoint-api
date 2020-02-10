@@ -54,6 +54,32 @@ exports.getAllUserBookings = async (req, res) => {
   }
 };
 
+exports.getAllHotelBookings = async (req, res) => {
+  const hotelId = req.params.hotelId;
+
+  try {
+    const bookings = await Booking.find({ hotelId: hotelId });
+    if (bookings.length >= 1) {
+      return res.status(OK).json({
+        data: {
+          bookings
+        },
+        status: "success"
+      });
+    }
+    return res.status(BAD_REQUEST).json({
+      message: "No Booking has been Made",
+      status: "error"
+    });
+  } catch (err) {
+    console.log(err);
+    res.status(INTERNAL_SERVER_ERROR).json({
+      message: err,
+      status: "error"
+    });
+  }
+};
+
 exports.getAllBookingInvoice = async (req, res) => {
   const hotelId = req.params.hotelId;
   const bookingReferences = [];
