@@ -112,7 +112,7 @@ exports.updateComment = async (req, res) => {
 
 exports.deleteComment = (req, res) => {
   const _id = req.params.id;
-  Room.deleteOne({ _id })
+  Comment.deleteOne({ _id })
     .then(result => {
       res
         .status(OK)

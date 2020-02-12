@@ -24,6 +24,7 @@ router.get(
 );
 router.get("/:bookingId", authGaurd, bookController.getABooking);
 router.put("/:bookingId", authGaurd, ccAuth, bookController.updateBooking);
+router.put("/user/:bookingId", authGaurd, bookController.updateBooking);
 router.delete("/:bookingId", authGaurd, ccAuth, bookController.deleteBooking);
 
 module.exports = router;
