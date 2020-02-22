@@ -105,7 +105,7 @@ exports.createCC = (req, res) => {
                 {
                   email: resp.email,
                   _id: resp._id,
-                  isAdmin: resp.isCC
+                  isCC: resp.isCC
                 },
                 process.env.JWT_KEY,
                 {
