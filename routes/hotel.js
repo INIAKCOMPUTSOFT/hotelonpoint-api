@@ -187,6 +187,7 @@ router.post('/verify', function (req, res) {
               _id: new mongoose.Types.ObjectId(),
               Room: req.body.BookingInfo.roomId,
               hotelId: room.hotelId,
+              hotelName: hotel.propertyInfo.hotelName,
               roomType: req.body.BookingInfo.roomType,
               author: req.body.userId,
               referenceNumber: body.data.reference,

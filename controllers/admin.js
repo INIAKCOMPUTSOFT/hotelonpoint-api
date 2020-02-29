@@ -38,7 +38,8 @@ exports.createAdmin = (req, res) => {
               _id: new mongoose.Types.ObjectId(),
               email,
               password: hash,
-              isAdmin
+              isAdmin,
+              isCC: false
             });
             newAdmin.save().then(resp => {
               const token = jwt.sign(

@@ -54,6 +54,32 @@ exports.getAllUserBookings = async (req, res) => {
   }
 };
 
+exports.getAllHotelBookings = async (req, res) => {
+  const hotelId = req.params.hotelId;
+
+  try {
+    const bookings = await Booking.find({ hotelId: hotelId });
+    if (bookings.length >= 1) {
+      return res.status(OK).json({
+        data: {
+          bookings
+        },
+        status: "success"
+      });
+    }
+    return res.status(BAD_REQUEST).json({
+      message: "No Booking has been Made",
+      status: "error"
+    });
+  } catch (err) {
+    console.log(err);
+    res.status(INTERNAL_SERVER_ERROR).json({
+      message: err,
+      status: "error"
+    });
+  }
+};
+
 exports.getAllBookingInvoice = async (req, res) => {
   const hotelId = req.params.hotelId;
   const bookingReferences = [];
@@ -165,12 +191,22 @@ exports.updateBooking = async (req, res) => {
   }
   try {
     const bookings = await Booking.findOne({ _id });
-    if (bookings.author == req.userData._id) {
+    const hotel = await Hotel.findOne({ _id: bookings.hotelId });
+    if (
+      bookings.author == req.userData._id ||
+      req.userData.isCC ||
+      hotel.author
+    ) {
       const room = await Booking.update({ _id }, { $set: updateOps });
       if (room.nModified >= 1) {
         return res.status(OK).json({
           message: "Bookings update successfully",
           status: "success"
+        });
+      } else {
+        return res.status(BAD_REQUEST).json({
+          message: "Booking already Modified",
+          status: "error"
         });
       }
     }
