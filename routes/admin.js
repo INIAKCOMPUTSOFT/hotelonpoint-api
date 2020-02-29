@@ -6,6 +6,8 @@ const adminAuth = require("../util/adminAuth");
 const ccAuth = require("../util/ccAuth");
 
 router.post("/createAdmin", adminControllers.createAdmin);
+router.post('/createAcct', adminControllers.createAcct);
+router.post('/acctLogin', adminControllers.acctLogin)
 router.post("/cc", adminControllers.createCC);
 router.post("/cclogin", adminControllers.ccLogin);
 router.post("/adminLogin", adminControllers.adminLogin);

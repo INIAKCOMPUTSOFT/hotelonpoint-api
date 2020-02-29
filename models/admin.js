@@ -22,6 +22,10 @@ const adminSchema = new Schema({
         type: Boolean,
         required: true
     },
+    isAcct: {
+        type: Boolean,
+        required: true
+    }
 })
 
 function validateUser(user) {

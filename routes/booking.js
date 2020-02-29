@@ -21,7 +21,7 @@ router.get(
   authGaurd,
   bookController.getAllBookingInvoice
 );
-router.get("/:bookingId", authGaurd, bookController.getABooking);
+router.get("/:bookingId", bookController.getABooking);
 router.put("/:bookingId", authGaurd, ccAuth, bookController.updateBooking);
 router.delete("/:bookingId", authGaurd, ccAuth, bookController.deleteBooking);
 

@@ -42,6 +42,10 @@ const bookingSchema = new Schema({
     type: Schema.Types.ObjectId,
     ref: "Room"
   },
+  hotelId: {
+    type: Schema.Types.ObjectId,
+    ref: "Hotel"
+  },
   roomType: {
     type: String,
     required: true
@@ -100,6 +104,14 @@ const bookingSchema = new Schema({
   },
   cardType: {
     type: String,
+    required: true
+  },
+  paymentMethod: {
+    type: String,
+    required: true
+  },
+  paymentStatus: {
+    type: Boolean,
     required: true
   },
   customer: customerSchema
