@@ -110,6 +110,14 @@ const bookingSchema = new Schema({
     type: String,
     required: true
   },
+  paymentMethod: {
+    type: String,
+    required: true
+  },
+  paymentStatus: {
+    type: Boolean,
+    required: true
+  },
   customer: customerSchema
 });
 const Booking = mongoose.model("Booking", bookingSchema);
