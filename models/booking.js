@@ -1,11 +1,7 @@
-const mongoose = require("mongoose");
-const Schema = mongoose.Schema;
+const mongoose = require('mongoose')
+const Schema = mongoose.Schema
 
 const customerSchema = {
-  customerId: {
-    type: String,
-    required: true
-  },
   firstName: {
     type: String,
     required: true
@@ -30,21 +26,24 @@ const customerSchema = {
     type: String,
     required: true
   },
+  otherRequest: {
+    type: String
+  },
   wantAirportShuttle: {
     type: Boolean,
     required: true
   }
-};
+}
 
 const bookingSchema = new Schema({
   _id: mongoose.Schema.Types.ObjectId,
   Room: {
     type: Schema.Types.ObjectId,
-    ref: "Room"
+    ref: 'Room'
   },
   hotelId: {
     type: Schema.Types.ObjectId,
-    ref: "Hotel"
+    ref: 'Hotel'
   },
   hotelName: {
     type: String,
@@ -56,7 +55,7 @@ const bookingSchema = new Schema({
   },
   author: {
     type: Schema.Types.ObjectId,
-    ref: "User"
+    ref: 'User'
   },
   checkOutStatus: {
     type: Boolean,
@@ -91,24 +90,19 @@ const bookingSchema = new Schema({
     required: true
   },
   paidAt: {
-    type: String,
-    required: true
+    type: String
   },
   channel: {
-    type: String,
-    required: true
+    type: String
   },
   currency: {
-    type: String,
-    required: true
+    type: String
   },
   countryCode: {
-    type: String,
-    required: true
+    type: String
   },
   cardType: {
-    type: String,
-    required: true
+    type: String
   },
   paymentMethod: {
     type: String,
@@ -118,7 +112,14 @@ const bookingSchema = new Schema({
     type: Boolean,
     required: true
   },
+  confirmBooking: {
+    type: Boolean,
+    required: true
+  },
+  acctNo: String,
+  acctName: String,
+  BankName: String,
   customer: customerSchema
-});
-const Booking = mongoose.model("Booking", bookingSchema);
-exports.Booking = Booking;
+})
+const Booking = mongoose.model('Booking', bookingSchema)
+exports.Booking = Booking

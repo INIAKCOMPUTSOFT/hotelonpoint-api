@@ -88,7 +88,8 @@ router.post('/verify', function (req, res) {
               },
               currentPercentage: hotel.percentageValue,
               paymentMethod: req.body.BookingInfo.paymentMethod,
-              paymentStatus: true
+              paymentStatus: true,
+              confirmBooking: false,
             }
             result = new Booking(book)
             result.save().then(async resp => {
@@ -205,7 +206,6 @@ router.post('/verify', function (req, res) {
               countryCode: body.data.authorization.country_code,
               cardType: body.data.authorization.card_type,
               customer: {
-                customerId: body.data.customer.id,
                 firstName: req.body.BookingInfo.firstname,
                 lastName: req.body.BookingInfo.lastname,
                 email: req.body.BookingInfo.email,
@@ -216,7 +216,8 @@ router.post('/verify', function (req, res) {
               },
               currentPercentage: hotel.percentageValue,
               paymentMethod: req.body.BookingInfo.paymentMethod,
-              paymentStatus: true
+              paymentStatus: true,
+              confirmBooking: false,
             }
             result = new Booking(book)
             result.save().then(async resp => {
