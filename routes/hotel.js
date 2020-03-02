@@ -64,7 +64,7 @@ router.post('/verify', function (req, res) {
               roomType: req.body.BookingInfo.roomType,
               author: req.body.userId,
               referenceNumber: body.data.reference,
-              amount: body.data.amount,
+              amount: Number(body.data.amount)/100,
               cancellationStatus: false,
               checkInStatus: false,
               checkOutStatus: false,

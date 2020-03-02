@@ -15,29 +15,56 @@ const reviewSchema = new Schema({
     type: String,
     required: true
   },
-  purposeOfTrip: {
+  tripPurpose: {
     type: String,
     required: true
   },
-  typeOfTravel: String,
-  travelWithPet: Boolean,
-  StaffRating: String,
-  facilities: String,
-  cleanliness: String,
-  comfort: String,
-  valueForMoney: String,
-  location: String,
-  likes: String,
-  disLikes: String,
-  headline: String,
-  propertyPhoto: String,
-  cityPhoto: String,
+  travellerType: {
+    type: String,
+    required: true
+  },
+  travelPet: {
+    type: String,
+    required: true
+  },
+  Staff: {
+    type: String,
+    required: true
+  },
+  facilities: {
+    type: String,
+    required: true
+  },
+  cleanliness: {
+    type: String,
+    required: true
+  },
+  comfort: {
+    type: String,
+    required: true
+  },
+  valueForMoney: {
+    type: String,
+    required: true
+  },
+  location: {
+    type: String,
+    required: true
+  },
+  likes: {
+    type: String,
+    required: true
+  },
+  disLikes: {
+    type: String,
+    required: true
+  },
   reviewerCountry: String,
-  starRating: {
+  totalRating: {
     type: String,
     required: true
   },
-  comment: {
+  review: {
     type: String,
     required: true
   },

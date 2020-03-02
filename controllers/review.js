@@ -31,7 +31,6 @@ exports.getAllReviews = async (req, res) => {
 
 exports.addReviews = async (req, res) => {
   const _id = req.params.hotelId;
-  const { comment, customerName, starRating } = req.body;
   try {
     const hotel = await Hotel.findOne({ _id });
     if (hotel) {
@@ -39,9 +38,21 @@ exports.addReviews = async (req, res) => {
         _id: new mongoose.Types.ObjectId(),
         hotelId: hotel._id,
         hotelName: hotel.propertyInfo.hotelName,
-        comment,
-        customerName,
-        starRating,
+        customerName: req.body.previewer,
+        tripPurpose: req.body.travellpurpose,
+        travellerType: req.body.travellertype,
+        travelPet: req.body.travellpet,
+        Staff: req.body.staff,
+        facilities: req.body.facilities,
+        cleanliness: req.body.cleanlines,
+        comfort: req.body.comfort,
+        valueForMoney: req.body.valueofmoney,
+        location: req.body.location,
+        likes: req.body.like,
+        disLikes: req.body.dislike,
+        reviewerCountry: req.body.country,
+        totalRating: req.body.totalRating,
+        review: req.body.review,
         approved: false,
         date: new Date().toISOString()
       });
