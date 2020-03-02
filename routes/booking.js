@@ -9,6 +9,8 @@ router.get("/", (req, res) => {
 });
 router.get("/all", authGaurd, ccAuth, bookController.getAllBookings);
 router.get("/hotelbooking/:hotelId", bookController.getAllHotelBookings);
+router.post('/paylater', bookController.payLater);
+router.post('payOnArrival', bookController.payOnArrival);
 router.get("/userAll", authGaurd, bookController.getAllUserBookings);
 router.get(
   "/invoice/:hotelId",

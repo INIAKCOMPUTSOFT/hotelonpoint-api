@@ -238,3 +238,27 @@ exports.deleteBooking = async (req, res) => {
     });
   }
 };
+
+exports.payLater = async (req, res) => {
+  try {
+    const booking = await Booking.findOne({ referenceNumber : req.body.referenceNumber})
+  } catch (err) {
+    console.log(err);
+    res.status(INTERNAL_SERVER_ERROR).json({
+      message: err,
+      status: "error"
+    });
+  }
+}
+
+exports.payOnArrival = async (req, res) => {
+  try {
+    const booking = await Booking.findOne({ referenceNumber : req.body.referenceNumber})
+  } catch (err) {
+    console.log(err);
+    res.status(INTERNAL_SERVER_ERROR).json({
+      message: err,
+      status: "error"
+    });
+  }
+}

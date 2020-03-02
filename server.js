@@ -8,7 +8,7 @@ const { mail1 }  = require('./template/welcomeMail')
 const app = express()
 var moment = require('moment-timezone');
 
-
+const { Booking } = require('./models/booking')
 
 //for mailing and text with conditional texting
 const nodemailer = require('nodemailer')
@@ -100,27 +100,41 @@ app.get('/mail/text', async (req, res) => {
   }
 })
 
-const time = new Date()
+app.get('/hello', (req, res) => {
+  console.log('i have run')
+  res.send('Hello World')
+})
 
-var add_minutes =  function (dt, minutes) {
-  if(minutes == 0) {
-    return dt;
-  }
-  return new Date(dt.getTime() + minutes*60000);
-}
+// const time = new Date()
 
-const date = add_minutes(time, 1)
-console.log(date);
+// var add_minutes =  function (dt, minutes) {
+//   if(minutes == 0) {
+//     return dt;
+//   }
+//   return new Date(dt.getTime() + minutes*60000);
+// }
 
-var task = cron.schedule('06 02 * * *', () =>  {
-  console.log('cron-time', time)
-  console.log(new Date >= date)
-  console.log('will execute every minute until stopped');
-  // if(new Date >= date) {
-  //   console.log('it stopped')
-  //   return task.stop();
-  // }
-});
+// const date = add_minutes(time, 1)
+// console.log(date);
+
+// var task = cron.schedule('06 02 * * *', () =>  {
+//   console.log('cron-time', time)
+//   console.log(new Date >= date)
+//   console.log('will execute every minute until stopped');
+//   // if(new Date >= date) {
+//   //   console.log('it stopped')
+//   //   return task.stop();
+//   // }
+// });
+
+// const logBook = async (id) => {
+//   console.log(id)
+//   const book = Booking.findOne({ _id: id })
+//   console.log('Here', book)
+// }
+cron.schedule('57 02 * * *', () => {
+  console.log('got here')
+})
 
 const port = process.env.PORT || 3400
 app.listen(port, () => console.log(`app listening on port ${port}`))
