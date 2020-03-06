@@ -489,6 +489,30 @@ exports.addvrtour = (req, res) => {
     });
 };
 
+exports.getAuthAcct = async (req, res) => {
+  const _id = await req.userData._id;
+  try {
+    const user = await Admin.findOne({ _id });
+    if (user) {
+      req.user = user;
+      const cred = {
+        _id: user._id,
+        email: user.email,
+        isAcct: user.isAcct
+      };
+      res.status(200).json({
+        message: "User Fetch successful",
+        userData: cred
+      });
+    } else {
+      res.status(404).json({ error: "Unauthorized" });
+    }
+  } catch (err) {
+    console.log(err);
+    res.status(500).json({ error: err });
+  }
+};
+
 exports.getAuthCCUser = async (req, res) => {
   const _id = await req.userData._id;
   try {

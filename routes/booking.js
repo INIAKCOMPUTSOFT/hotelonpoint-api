@@ -3,6 +3,7 @@ const router = express.Router();
 const bookController = require("../controllers/booking");
 const authGaurd = require("../util/authGaurd");
 const ccAuth = require("../util/ccAuth");
+const acctAuth = require('../util/acctAuth')
 
 router.get("/", (req, res) => {
   res.send("Booking");
@@ -20,12 +21,20 @@ router.get(
 );
 
 router.get(
+  "/acct/invoice/:hotelId",
+  authGaurd,
+  acctAuth,
+  bookController.getAllBookingInvoice
+);
+
+router.get(
   "/userinvoice/:hotelId",
   authGaurd,
   bookController.getAllBookingInvoice
 );
 router.get("/:bookingId", bookController.getABooking);
 router.put("/:bookingId", authGaurd, ccAuth, bookController.updateBooking);
+router.put("/acct/:bookingId", authGaurd, acctAuth, bookController.updateBooking);
 router.put("/user/:bookingId", authGaurd, bookController.updateBooking);
 router.delete("/:bookingId", authGaurd, ccAuth, bookController.deleteBooking);
 
