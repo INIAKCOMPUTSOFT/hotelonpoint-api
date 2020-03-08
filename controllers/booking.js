@@ -1,9 +1,10 @@
 const mongoose = require('mongoose')
 const { Booking } = require('../models/booking')
 const { Hotel } = require('../models/hotel')
+const { User } = require('../models/User')
 const { Room } = require('../models/room')
 const { BAD_REQUEST, OK, INTERNAL_SERVER_ERROR } = require('http-status-codes')
-const { bookingMail2 } = require('../template/welcomeMail')
+const { bookingMail, bookingMail2, bookingMail3, bookingMail4 } = require('../template/welcomeMail')
 const nodemailer = require('nodemailer')
 
 exports.getAllBookings = async (req, res) => {
@@ -33,7 +34,8 @@ exports.getAllBookings = async (req, res) => {
 
 exports.getAllUserBookings = async (req, res) => {
   try {
-    const bookings = await Booking.find({ author: req.userData._id })
+    const user = await User.findOne({ _id: req.userData._id })
+    const bookings = await Booking.find({ 'customer.email': user.email })
     if (bookings.length >= 1) {
       res.status(OK).json({
         data: {
@@ -260,8 +262,8 @@ exports.payLater = async (req, res) => {
     confirmbooking,
     amount,
     referenceNumber,
-    acctNo,
-    acctName,
+    AcctNo,
+    AcctName,
     BankName
   } = req.body
   try {
@@ -270,6 +272,145 @@ exports.payLater = async (req, res) => {
     const booking = await Booking.findOne({
       referenceNumber: req.body.referenceNumber
     })
+    const user = await User.findOne({ email: email })
+    if (!user) {
+      const salt = await bcrypt.genSalt(10)
+      const hash = await bcrypt.hash('123456', salt)
+      newUser = new User({
+        _id: new mongoose.Types.ObjectId(),
+        fullName: `${firstname} ${lastname}`,
+        email: email,
+        password: hash,
+        imageUrl: defaultImg,
+        isHotelOwner: false
+      })
+      await newUser.save()
+      const book = {
+        _id: new mongoose.Types.ObjectId(),
+        Room: roomId,
+        hotelId: room.hotelId,
+        hotelName: hotel.propertyInfo.hotelName,
+        roomType: roomType,
+        author: req.body.userId,
+        referenceNumber: referenceNumber,
+        amount: amount,
+        cancellationStatus: false,
+        otherRequest: otherrequest,
+        checkInStatus: false,
+        checkOutStatus: false,
+        checkIn: checkin,
+        checkOut: checkout,
+        createdAt: new Date().toISOString(),
+        currency: 'NGN',
+        customer: {
+          firstName: firstname,
+          lastName: lastname,
+          email: email,
+          phone: phone,
+          getDeals: getdeals,
+          title: title,
+          wantAirportShuttle: wantairportshuttle
+        },
+        currentPercentage: hotel.percentageValue,
+        paymentMethod: paymentMethod,
+        paymentStatus: paymentstatus,
+        confirmBooking: confirmbooking,
+        AcctNo,
+        AcctName,
+        BankName
+      }
+      result = new Booking(book)
+      result.save().then(async resp => {
+        if (resp) {
+          let transporter = nodemailer.createTransport({
+            service: 'gmail',
+            auth: {
+              user: 'hotelonpoints@gmail.com',
+              pass: 'hotelonpoint.com'
+            }
+          })
+
+          let mailOptions = {
+            from: '"HotelonPoints.com" <support@hotelonpoint>', // sender address
+            to: req.body.BookingInfo.email, // list of receivers
+            subject: 'Booking on Hotel-on-points', // Subject line
+            text: 'Hello?', // plain text body
+            html: bookingMail4(
+              email,
+              reference,
+              firstname,
+              lastname,
+              checkin,
+              checkout,
+              paymentMethod,
+              hotel.propertyInfo.hotelName,
+              hotel.managementDetails.frontDeskPhoneOne,
+              roomType,
+              amount,
+              AcctNo,
+              AcctName,
+              BankName
+            ),
+            attachments: [
+              {
+                filename: 'logo',
+                path:
+                  'https://res.cloudinary.com/sapeled3/image/upload/v1582959008/new/HOP_wowhhl_l6uihv_vnukz9.png',
+                cid: 'logo' //same cid value as in the html img src
+              },
+              {
+                filename: 'facebook',
+                path:
+                  'https://res.cloudinary.com/sapeled3/image/upload/v1582914214/new/Facebook3_bdmwch.png',
+                cid: 'facebook' //same cid value as in the html img src
+              },
+              {
+                filename: 'instagram',
+                path:
+                  'https://res.cloudinary.com/sapeled3/image/upload/v1582914214/new/Instagram2_yvusie.png',
+                cid: 'instagram' //same cid value as in the html img src
+              },
+              {
+                filename: 'twitter',
+                path:
+                  'https://res.cloudinary.com/sapeled3/image/upload/v1582914215/new/Twitter2_e2mse5.png',
+                cid: 'twitter' //same cid value as in the html img src
+              },
+              {
+                filename: 'linkedin',
+                path:
+                  'https://res.cloudinary.com/sapeled3/image/upload/v1582914215/new/LinkedIn2_z20k0w.png',
+                cid: 'linkedin' //same cid value as in the html img src
+              },
+              {
+                filename: 'youtube',
+                path:
+                  'https://res.cloudinary.com/sapeled3/image/upload/v1582914216/new/YouTube1_g84t0d.png',
+                cid: 'youtube' //same cid value as in the html img src
+              },
+              {
+                filename: 'hotelImage',
+                path: room.imageUrl.url,
+                cid: 'hotelImage' //same cid value as in the html img src
+              }
+            ]
+            // html body
+          }
+          // send mail with defined transport object
+          await transporter.sendMail(mailOptions, async (error, info) => {
+            if (error) {
+              return console.log(error)
+            }
+            console.log('Message sent: %s', info.messageId)
+            console.log('Preview URL: %s', nodemailer.getTestMessageUrl(info))
+            return res.status(200).json({
+              status: 'success',
+              message: resp
+            })
+          })
+        }
+      })
+    }
     if (!booking) {
       const book = {
         _id: new mongoose.Types.ObjectId(),
@@ -301,8 +442,8 @@ exports.payLater = async (req, res) => {
         paymentMethod: paymentMethod,
         paymentStatus: paymentstatus,
         confirmBooking: confirmbooking,
-        acctNo,
-        acctName,
+        AcctNo,
+        AcctName,
         BankName
       }
       result = new Booking(book)
@@ -321,7 +462,7 @@ exports.payLater = async (req, res) => {
             to: email, // list of receivers
             subject: 'Booking on Hotel-on-points', // Subject line
             text: 'Hello?', // plain text body
-            html: bookingMail2(
+            html: bookingMail3(
               email,
               referenceNumber,
               firstname,
@@ -334,8 +475,8 @@ exports.payLater = async (req, res) => {
               hotel.managementDetails.frontDeskPhoneOne,
               roomType,
               amount,
-              acctNo,
-              acctName,
+              AcctNo,
+              AcctName,
               BankName
             ),
             attachments: [
@@ -408,6 +549,8 @@ exports.payLater = async (req, res) => {
 }
 
 exports.payOnArrival = async (req, res) => {
+  const defaultImg =
+    'https://res.cloudinary.com/sapeled3/image/upload/v1575835409/bhaulju2fh4mn5y8yqa4.png'
   const {
     email,
     phone,
@@ -433,6 +576,139 @@ exports.payOnArrival = async (req, res) => {
     const booking = await Booking.findOne({
       referenceNumber: req.body.referenceNumber
     })
+    const user = await User.findOne({ email: email })
+    if (!user) {
+      const salt = await bcrypt.genSalt(10)
+      const hash = await bcrypt.hash('123456', salt)
+      newUser = new User({
+        _id: new mongoose.Types.ObjectId(),
+        fullName: `${firstname} ${lastname}`,
+        email: email,
+        password: hash,
+        imageUrl: defaultImg,
+        isHotelOwner: false
+      })
+      await newUser.save()
+      const book = {
+        _id: new mongoose.Types.ObjectId(),
+        Room: roomId,
+        hotelId: room.hotelId,
+        hotelName: hotel.propertyInfo.hotelName,
+        roomType: roomType,
+        author: req.body.userId,
+        referenceNumber: referenceNumber,
+        amount: amount,
+        cancellationStatus: false,
+        otherRequest: otherrequest,
+        checkInStatus: false,
+        checkOutStatus: false,
+        checkIn: checkin,
+        checkOut: checkout,
+        createdAt: new Date().toISOString(),
+        currency: 'NGN',
+        customer: {
+          firstName: firstname,
+          lastName: lastname,
+          email: email,
+          phone: phone,
+          getDeals: getdeals,
+          title: title,
+          wantAirportShuttle: wantairportshuttle
+        },
+        currentPercentage: hotel.percentageValue,
+        paymentMethod: paymentMethod,
+        paymentStatus: paymentstatus,
+        confirmBooking: confirmbooking
+      }
+      result = new Booking(book)
+      result.save().then(async resp => {
+        if (resp) {
+          let transporter = nodemailer.createTransport({
+            service: 'gmail',
+            auth: {
+              user: 'hotelonpoints@gmail.com',
+              pass: 'hotelonpoint.com'
+            }
+          })
+
+          let mailOptions = {
+            from: '"HotelonPoints.com" <support@hotelonpoint>', // sender address
+            to: req.body.BookingInfo.email, // list of receivers
+            subject: 'Booking on Hotel-on-points', // Subject line
+            text: 'Hello?', // plain text body
+            html: bookingMail2(
+              email,
+              reference,
+              firstname,
+              lastname,
+              checkin,
+              checkout,
+              paymentMethod,
+              hotel.propertyInfo.hotelName,
+              hotel.managementDetails.frontDeskPhoneOne,
+              roomType,
+              amount
+            ),
+            attachments: [
+              {
+                filename: 'logo',
+                path:
+                  'https://res.cloudinary.com/sapeled3/image/upload/v1582959008/new/HOP_wowhhl_l6uihv_vnukz9.png',
+                cid: 'logo' //same cid value as in the html img src
+              },
+              {
+                filename: 'facebook',
+                path:
+                  'https://res.cloudinary.com/sapeled3/image/upload/v1582914214/new/Facebook3_bdmwch.png',
+                cid: 'facebook' //same cid value as in the html img src
+              },
+              {
+                filename: 'instagram',
+                path:
+                  'https://res.cloudinary.com/sapeled3/image/upload/v1582914214/new/Instagram2_yvusie.png',
+                cid: 'instagram' //same cid value as in the html img src
+              },
+              {
+                filename: 'twitter',
+                path:
+                  'https://res.cloudinary.com/sapeled3/image/upload/v1582914215/new/Twitter2_e2mse5.png',
+                cid: 'twitter' //same cid value as in the html img src
+              },
+              {
+                filename: 'linkedin',
+                path:
+                  'https://res.cloudinary.com/sapeled3/image/upload/v1582914215/new/LinkedIn2_z20k0w.png',
+                cid: 'linkedin' //same cid value as in the html img src
+              },
+              {
+                filename: 'youtube',
+                path:
+                  'https://res.cloudinary.com/sapeled3/image/upload/v1582914216/new/YouTube1_g84t0d.png',
+                cid: 'youtube' //same cid value as in the html img src
+              },
+              {
+                filename: 'hotelImage',
+                path: room.imageUrl.url,
+                cid: 'hotelImage' //same cid value as in the html img src
+              }
+            ]
+            // html body
+          }
+          // send mail with defined transport object
+          await transporter.sendMail(mailOptions, async (error, info) => {
+            if (error) {
+              return console.log(error)
+            }
+            console.log('Message sent: %s', info.messageId)
+            console.log('Preview URL: %s', nodemailer.getTestMessageUrl(info))
+            return res.status(200).json({
+              status: 'success',
+              message: resp
+            })
+          })
+        }
+      })
+    }
     if (!booking) {
       const book = {
         _id: new mongoose.Types.ObjectId(),
@@ -481,7 +757,7 @@ exports.payOnArrival = async (req, res) => {
             to: email, // list of receivers
             subject: 'Booking on Hotel-on-points', // Subject line
             text: 'Hello?', // plain text body
-            html: bookingMail2(
+            html: bookingMail(
               email,
               referenceNumber,
               firstname,
