@@ -6,6 +6,7 @@ const { Room } = require('../models/room')
 const { BAD_REQUEST, OK, INTERNAL_SERVER_ERROR } = require('http-status-codes')
 const { bookingMail, bookingMail2, bookingMail3, bookingMail4 } = require('../template/welcomeMail')
 const nodemailer = require('nodemailer')
+const bcrypt = require('bcryptjs')
 
 exports.getAllBookings = async (req, res) => {
   try {
@@ -244,6 +245,8 @@ exports.deleteBooking = async (req, res) => {
 }
 
 exports.payLater = async (req, res) => {
+  const defaultImg =
+    'https://res.cloudinary.com/sapeled3/image/upload/v1575835409/bhaulju2fh4mn5y8yqa4.png'
   const {
     email,
     phone,
@@ -332,7 +335,7 @@ exports.payLater = async (req, res) => {
 
           let mailOptions = {
             from: '"HotelonPoints.com" <support@hotelonpoint>', // sender address
-            to: req.body.BookingInfo.email, // list of receivers
+            to: email, // list of receivers
             subject: 'Booking on Hotel-on-points', // Subject line
             text: 'Hello?', // plain text body
             html: bookingMail4(
@@ -633,7 +636,7 @@ exports.payOnArrival = async (req, res) => {
 
           let mailOptions = {
             from: '"HotelonPoints.com" <support@hotelonpoint>', // sender address
-            to: req.body.BookingInfo.email, // list of receivers
+            to: email, // list of receivers
             subject: 'Booking on Hotel-on-points', // Subject line
             text: 'Hello?', // plain text body
             html: bookingMail2(
