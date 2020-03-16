@@ -4,8 +4,10 @@ const router = express.Router()
 const userController = require('../controllers/user')
 const authGaurd = require('../util/authGaurd')
 const { Mail } = require('../models/mail')
+const mongoose = require('mongoose')
 
-const multer = require('multer')
+// const multer = require('multer')
+const upload = require('../multer')
 // const storage = multer.diskStorage({
 //     destination: function(req, file, cb){
 //         cb(null, './uploads/')
@@ -28,17 +30,17 @@ const multer = require('multer')
 //     },
 //     fileFilter
 // })
-const upload = multer({ dest: 'uploads/' })
+// const upload = multer({ dest: 'uploads/' })
 
 router.get('/me', authGaurd, userController.getAuthUser)
 router.post('/', userController.userSignUp)
 router.post('/logins', userController.login)
 router.get('/:id', userController.getAuser)
-router.put(
-  '/image/:id',
-  upload.single('profileImage'),
-  userController.updateProfilePic
-)
+// router.put(
+//   '/image/:id',
+//   upload.single('image'),
+//   userController.updateProfilePic
+// )
 router.post('/validateUser', userController.checkValidUser)
 router.put('/changePassword/:id', userController.changePassword)
 router.put('/userUpdate', authGaurd, userController.updateDetails)

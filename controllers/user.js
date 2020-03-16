@@ -221,6 +221,8 @@ exports.getAuser = async (req, res) => {
 };
 
 exports.updateProfilePic = (req, res) => {
+  
+  console.log(req.files)
   const _id = req.params.id;
   const file = req.files.profileImage;
   const md5 = file.md5;
