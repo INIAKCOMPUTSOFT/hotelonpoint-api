@@ -39,7 +39,8 @@ exports.createAdmin = (req, res) => {
               email,
               password: hash,
               isAdmin,
-              isCC: false
+              isCC: false,
+              isAcct: false
             });
             newAdmin.save().then(resp => {
               const token = jwt.sign(
@@ -98,6 +99,7 @@ exports.createCC = (req, res) => {
               email,
               password: hash,
               isAdmin: false,
+              isAcct: false,
               isCC
             });
             newAdmin.save().then(resp => {
@@ -141,7 +143,7 @@ exports.createAcct = (req, res) => {
     .then(admin => {
       if (admin.length >= 1) {
         res.status(BAD_REQUEST).json({
-          message: "Accountant Already exists",
+          message: "Email Already exists",
           status: "error"
         });
       } else {
@@ -219,6 +221,11 @@ exports.acctLogin = (req, res) => {
             data: token,
             status: "success"
           });
+        }else {
+          res.status(BAD_REQUEST).json({
+            message: "Invalid Password",
+            data: "error"
+          });
         }
       });
     })
@@ -244,6 +251,7 @@ exports.ccLogin = (req, res) => {
       }
 
       bcrypt.compare(password, admin.password).then(isAdmin => {
+        console.log(isAdmin)
         if (isAdmin) {
           const token = jwt.sign(
             {
@@ -259,6 +267,11 @@ exports.ccLogin = (req, res) => {
           res.status(OK).json({
             data: token,
             status: "success"
+          });
+        }else {
+          res.status(BAD_REQUEST).json({
+            message: "Invalid Password",
+            data: "error"
           });
         }
       });
@@ -300,6 +313,11 @@ exports.adminLogin = (req, res) => {
           res.status(OK).json({
             data: token,
             status: "success"
+          });
+        }else {
+          res.status(BAD_REQUEST).json({
+            message: "Invalid Password",
+            data: "error"
           });
         }
       });
